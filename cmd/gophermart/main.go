@@ -1,12 +1,15 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/ex0rcist/gophermart/internal/config"
 	"github.com/ex0rcist/gophermart/internal/logging"
 	"github.com/ex0rcist/gophermart/internal/server"
 )
 
 func main() {
+	fmt.Println("=================================================================")
 	logging.Setup()
 	logging.LogInfo("starting server...")
 
