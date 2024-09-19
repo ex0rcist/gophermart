@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"time"
 
 	"github.com/caarlos0/env/v11"
 	"github.com/ex0rcist/gophermart/internal/entities"
@@ -23,8 +24,9 @@ type Server struct {
 }
 
 type Accrual struct {
-	Address string `env:"ACCRUAL_SYSTEM_ADDRESS"`
-	Timeout int
+	Address        string `env:"ACCRUAL_SYSTEM_ADDRESS"`
+	Timeout        int
+	RefillInterval time.Duration
 }
 
 type Config struct {
@@ -61,12 +63,13 @@ func NewDefault(_ *Config) (*Config, error) {
 	config := &Config{
 		DB: DB{},
 		Server: Server{
-			Address: "0.0.0.0:8080",
+			Address: "0.0.0.0:8282",
 			Timeout: 60,
 		},
 		Accrual: Accrual{
-			Address: "0.0.0.0:8282",
-			Timeout: 60,
+			Address:        "0.0.0.0:8080",
+			RefillInterval: 5 * time.Second,
+			Timeout:        60,
 		},
 	}
 

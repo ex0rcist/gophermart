@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/shopspring/decimal"
@@ -24,4 +26,15 @@ type Order struct {
 	Accrual   decimal.Decimal
 	CreatedAt time.Time
 	UpdatedAt time.Time
+}
+
+func (o *Order) String() string {
+	str := []string{
+		fmt.Sprintf("user_id=%d", o.UserID),
+		fmt.Sprintf("number=%s", o.Number),
+		fmt.Sprintf("status=%s", o.Status),
+		fmt.Sprintf("accrual=%s", o.Accrual),
+	}
+
+	return fmt.Sprintf("order(id=%d)[%s]", o.ID, strings.Join(str, ";"))
 }

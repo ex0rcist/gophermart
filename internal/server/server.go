@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/ex0rcist/gophermart/internal/accrual"
 	"github.com/ex0rcist/gophermart/internal/config"
 	"github.com/ex0rcist/gophermart/internal/handlers"
 	"github.com/ex0rcist/gophermart/internal/logging"
@@ -23,9 +24,15 @@ func New(config *config.Config) (*Server, error) {
 		return nil, err
 	}
 
+	//ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	//defer cancel()
+
 	ctx := context.Background()
 
-	// storageService := storage.NewService(dataStorage)
+	acr := accrual.NewService(ctx, &config.Accrual, pgxStorage)
+	acr.Start()
+
+	// todo: different context?
 	hdl := handlers.NewHandlers(ctx, &config.Server, pgxStorage)
 
 	return &Server{

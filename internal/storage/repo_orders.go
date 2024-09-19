@@ -8,6 +8,7 @@ import (
 	"github.com/ex0rcist/gophermart/internal/entities"
 	"github.com/ex0rcist/gophermart/internal/models"
 	"github.com/jackc/pgx/v5"
+	"github.com/shopspring/decimal"
 )
 
 type OrderCreateDTO struct {
@@ -80,4 +81,49 @@ func (s *PGXStorage) OrderFindByNumber(ctx context.Context, number string) (*mod
 	}
 
 	return order, nil
+}
+
+func (s *PGXStorage) OrderListForUpdate(ctx context.Context) ([]*models.Order, error) {
+	stmt := `SELECT id, user_id, number, status, created_at FROM orders WHERE status IN ('NEW', 'PROCESSING');`
+	orders := make([]*models.Order, 0)
+
+	rows, err := s.pool.Query(ctx, stmt)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, entities.ErrRecordNotFound
+		}
+		return nil, err
+	}
+
+	for rows.Next() {
+		order := &models.Order{}
+		if err = rows.Scan(&order.ID, &order.UserID, &order.Number, &order.Status, &order.CreatedAt); err != nil {
+			return nil, fmt.Errorf("PGXStorage -> OrderListForUpdate() error: %w", err)
+		}
+		orders = append(orders, order)
+	}
+
+	err = rows.Err()
+	if err != nil {
+		return nil, fmt.Errorf("PGXStorage -> OrderListForUpdate() error: %w", err)
+	}
+
+	return orders, nil
+}
+
+type OrderUpdateDTO struct {
+	ID      models.OrderID
+	Status  models.OrderStatus
+	Accrual decimal.Decimal
+}
+
+func (s *PGXStorage) OrderUpdate(ctx context.Context, d OrderUpdateDTO) error {
+	stmt := `UPDATE orders SET status = $1, accrual = $2 WHERE id = $3`
+
+	_, err := s.pool.Exec(ctx, stmt, d.Status, d.Accrual, d.ID)
+	if err != nil {
+		return fmt.Errorf("PGXStorage -> OrderUpdate() error: %w", err)
+	}
+
+	return nil
 }
