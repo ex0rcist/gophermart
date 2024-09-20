@@ -119,7 +119,7 @@ func validateAddr(address string) error {
 
 	_, err := net.ResolveTCPAddr("tcp", address)
 	if err != nil {
-		return fmt.Errorf("address cannot be resolved")
+		return fmt.Errorf("address %s cannot be resolved", address)
 	}
 
 	return nil
