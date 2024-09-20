@@ -58,7 +58,7 @@ func (t Task) Handle() error {
 
 	case StatusProcessed:
 		// обработан; обновляем статус и сумму накоплений
-		logging.LogInfoCtx(ctx, fmt.Sprintf("%s processed, accrual=%d", t.order, res.Amount))
+		logging.LogInfoCtx(ctx, fmt.Sprintf("%s processed, accrual=%s", t.order, res.Amount))
 		err := t.updateOrder(ctx, models.OrderStatusProcessed, res.Amount)
 		if err != nil {
 			return err
@@ -68,10 +68,31 @@ func (t Task) Handle() error {
 	return nil
 }
 
-func (t Task) updateOrder(ctx context.Context, status models.OrderStatus, accrual decimal.Decimal) error {
-	d := storage.OrderUpdateDTO{ID: t.order.ID, Status: status, Accrual: accrual}
+func (t Task) updateOrder(ctx context.Context, status models.OrderStatus, amount decimal.Decimal) error {
+	d := storage.OrderUpdateDTO{ID: t.order.ID, Status: status, Accrual: amount}
 
-	err := t.service.storage.OrderUpdate(ctx, d)
+	tx, err := t.service.storage.StartTx(ctx)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		err := t.service.storage.RollbackTx(ctx, tx)
+		if err != nil {
+			logging.LogErrorCtx(ctx, err, "Task: updateOrder(): error rolling tx back")
+		}
+	}()
+
+	err = t.service.storage.OrderUpdate(ctx, tx.Tx, d)
+	if err != nil {
+		return err
+	}
+
+	err = t.service.storage.UserUpdateBalanceAndWithdrawals(ctx, tx.Tx, t.order.UserID)
+	if err != nil {
+		return err
+	}
+
+	err = t.service.storage.CommitTx(ctx, tx)
 	if err != nil {
 		return err
 	}

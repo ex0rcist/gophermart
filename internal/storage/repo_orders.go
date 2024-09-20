@@ -117,10 +117,16 @@ type OrderUpdateDTO struct {
 	Accrual decimal.Decimal
 }
 
-func (s *PGXStorage) OrderUpdate(ctx context.Context, d OrderUpdateDTO) error {
+func (s *PGXStorage) OrderUpdate(ctx context.Context, tx pgx.Tx, d OrderUpdateDTO) error {
 	stmt := `UPDATE orders SET status = $1, accrual = $2 WHERE id = $3`
 
-	_, err := s.pool.Exec(ctx, stmt, d.Status, d.Accrual, d.ID)
+	var err error
+	if tx != nil {
+		_, err = tx.Exec(ctx, stmt, d.Status, d.Accrual, d.ID)
+	} else {
+		_, err = s.pool.Exec(ctx, stmt, d.Status, d.Accrual, d.ID)
+	}
+
 	if err != nil {
 		return fmt.Errorf("PGXStorage -> OrderUpdate() error: %w", err)
 	}
