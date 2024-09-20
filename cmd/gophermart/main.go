@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 func main() {
 	fmt.Println("=========")
+
+	panic(errors.New("WTF"))
 }
