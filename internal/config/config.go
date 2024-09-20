@@ -3,7 +3,9 @@ package config
 import (
 	"fmt"
 	"net"
+	"net/url"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/caarlos0/env/v11"
@@ -113,13 +115,39 @@ func validateConfig(c *Config) error {
 }
 
 func validateAddr(address string) error {
-	if address == "" {
-		return fmt.Errorf("empty address")
+	if !strings.HasPrefix(address, "http://") && !strings.HasPrefix(address, "https://") {
+		address = "http://" + address
 	}
 
-	_, err := net.ResolveTCPAddr("tcp", address)
+	parsedURL, err := url.Parse(address)
 	if err != nil {
-		return fmt.Errorf("address %s cannot be resolved", address)
+		return fmt.Errorf("error parsing URL: %w", err)
+	}
+
+	// проверяем наличие хоста
+	host := parsedURL.Host
+	if host == "" {
+		return fmt.Errorf("error parsing URL: host is missing")
+	}
+
+	// проверяем хост и порт с помощью net.SplitHostPort
+	hostOnly, port, err := net.SplitHostPort(host)
+	if err != nil {
+		return fmt.Errorf("error parsing URL: %w", err)
+	}
+
+	// проверяем корректность IP или доменного имени
+	if net.ParseIP(hostOnly) == nil {
+		if _, err := net.LookupHost(hostOnly); err != nil {
+			return fmt.Errorf("error parsing ip: invalid host or IP: %w", err)
+		}
+	}
+
+	// проверяем корректность порта (если он был указан)
+	if port != "" {
+		if _, err := net.LookupPort("tcp", port); err != nil {
+			return fmt.Errorf("error parsing ip: invalid port: %w", err)
+		}
 	}
 
 	return nil

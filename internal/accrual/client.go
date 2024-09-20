@@ -51,7 +51,7 @@ func NewClient(address string, timeout time.Duration) *Client {
 }
 
 func (c *Client) GetBonuses(ctx context.Context, orderNumber string) (*Response, *ClientError) {
-	url := fmt.Sprintf("http://%s/api/orders/%s", c.address, orderNumber)
+	url := fmt.Sprintf("%s/api/orders/%s", c.address, orderNumber)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
