@@ -88,10 +88,27 @@ func (s *PGXStorage) UserGetBalance(ctx context.Context, tx pgx.Tx, id models.Us
 }
 
 func (s *PGXStorage) UserUpdateBalanceAndWithdrawals(ctx context.Context, tx pgx.Tx, id models.UserID) error {
-	stmt := `UPDATE users SET
-				balance = COALESCE((SELECT SUM(o.accrual) FROM orders o WHERE o.user_id = id AND o.status = 'PROCESSED'), 0),
-    			withdrawn = COALESCE((SELECT SUM(w.amount) FROM withdrawals w WHERE w.user_id = id), 0)
-			WHERE id = $1;`
+	stmt := `
+	WITH
+    	accruals AS (        
+			SELECT o.user_id, COALESCE(SUM(o.accrual), 0) AS total_accrual
+        	FROM orders o
+        	WHERE o.status = 'PROCESSED'
+        	GROUP BY o.user_id),
+    	withdrawals AS (
+        	SELECT w.user_id, COALESCE(SUM(w.amount), 0) AS total_withdrawn
+        	FROM withdrawals w       
+        	GROUP BY w.user_id)
+	UPDATE users u
+	SET
+    	balance = COALESCE(a.total_accrual, 0) - COALESCE(w.total_withdrawn, 0),
+    	withdrawn = COALESCE(w.total_withdrawn, 0)
+	FROM
+    	accruals a
+    LEFT JOIN 
+		withdrawals w ON a.user_id = w.user_id
+	WHERE
+    	u.id = $1 AND a.user_id = $1`
 
 	var err error
 	if tx != nil {
