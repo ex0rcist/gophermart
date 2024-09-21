@@ -6,12 +6,10 @@ import (
 )
 
 func init() {
-
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		// проверка не требуется, т.к. проверяется ключ и функция на nil, иначе - паника
 		_ = v.RegisterValidation("luhn", luhnValidation)
 	}
-
 }
 
 var luhnValidation validator.Func = func(fl validator.FieldLevel) bool {

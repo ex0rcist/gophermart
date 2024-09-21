@@ -26,6 +26,7 @@ func (w Worker) work() {
 
 		select {
 		case <-w.service.ctx.Done():
+			logging.LogDebug("accrual worker stopping")
 			return
 		default:
 		}
@@ -46,7 +47,7 @@ func (w Worker) work() {
 				w.service.Push(task)
 			}
 
-			logging.LogErrorCtx(w.service.ctx, err)
+			logging.LogErrorCtx(w.service.ctx, fmt.Errorf("task failed: %w", err))
 			continue
 		}
 

@@ -34,7 +34,7 @@ func (m DatabaseMigrator) Run() error {
 			m.migrator = migrator
 
 			if err != nil {
-				logging.LogError(err)
+				logging.LogError(err, "err running migrations")
 			}
 
 			return err

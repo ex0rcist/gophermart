@@ -34,7 +34,7 @@ func (t Task) Handle() error {
 
 	// проверяем
 	switch res.Status {
-	case StatusNew:
+	case StatusRegistered:
 		// только что создан
 		logging.LogInfoCtx(ctx, fmt.Sprintf("%s is just created, do nothing", t.order))
 
@@ -76,7 +76,7 @@ func (t Task) updateOrder(ctx context.Context, status models.OrderStatus, amount
 		return err
 	}
 	defer func() {
-		err := t.service.storage.RollbackTx(ctx, tx)
+		err := tx.Rollback()
 		if err != nil {
 			logging.LogErrorCtx(ctx, err, "Task: updateOrder(): error rolling tx back")
 		}
@@ -92,7 +92,7 @@ func (t Task) updateOrder(ctx context.Context, status models.OrderStatus, amount
 		return err
 	}
 
-	err = t.service.storage.CommitTx(ctx, tx)
+	err = tx.Commit()
 	if err != nil {
 		return err
 	}

@@ -21,14 +21,14 @@ var (
 )
 
 func UserWithdrawBalance(ctx context.Context, s *storage.PGXStorage, form UserWithdrawBalanceForm) error {
-	// стартуем транзакцию, детали реализации скрыты в PGXStorage
+	// стартуем транзакцию, детали реализации скрыты в PGXTx
 	tx, err := s.StartTx(ctx)
 	if err != nil {
 		logging.LogErrorCtx(ctx, err, "UserWithdrawBalance(): error starting tx")
 		return err
 	}
 	defer func() {
-		err := s.RollbackTx(ctx, tx)
+		err := tx.Rollback()
 		if err != nil {
 			logging.LogErrorCtx(ctx, err, "UserWithdrawBalance(): error rolling tx back")
 		}
@@ -61,7 +61,7 @@ func UserWithdrawBalance(ctx context.Context, s *storage.PGXStorage, form UserWi
 	}
 
 	// завершаем транзакцию
-	err = s.CommitTx(ctx, tx)
+	err = tx.Commit()
 	if err != nil {
 		logging.LogErrorCtx(ctx, err, "UserWithdrawBalance(): error commiting tx")
 		return err

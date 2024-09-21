@@ -13,12 +13,6 @@ type PGXStorage struct {
 	pool *pgxpool.Pool
 }
 
-type PGXTx struct {
-	Tx         pgx.Tx
-	committed  bool
-	rolledBack bool
-}
-
 func NewPGXStorage(config config.DB) (*PGXStorage, error) {
 	ctx := context.Background()
 
@@ -50,30 +44,37 @@ func NewPGXStorage(config config.DB) (*PGXStorage, error) {
 
 func (s *PGXStorage) StartTx(ctx context.Context) (*PGXTx, error) {
 	tx, err := s.pool.BeginTx(ctx, pgx.TxOptions{})
-	return &PGXTx{Tx: tx, committed: false, rolledBack: false}, err
+	return &PGXTx{Tx: tx, ctx: ctx, committed: false, rolledBack: false}, err
 }
 
-func (s *PGXStorage) RollbackTx(ctx context.Context, w *PGXTx) error {
-	if w.rolledBack || w.committed {
+type PGXTx struct {
+	Tx         pgx.Tx
+	ctx        context.Context
+	committed  bool
+	rolledBack bool
+}
+
+func (t *PGXTx) Rollback() error {
+	if t.rolledBack || t.committed {
 		return nil
 	}
 
-	err := w.Tx.Rollback(ctx)
+	err := t.Tx.Rollback(t.ctx)
 	if err == nil {
-		w.rolledBack = true
+		t.rolledBack = true
 	}
 
 	return err
 }
 
-func (s *PGXStorage) CommitTx(ctx context.Context, w *PGXTx) error {
-	if w.rolledBack || w.committed {
+func (t *PGXTx) Commit() error {
+	if t.rolledBack || t.committed {
 		return nil
 	}
 
-	err := w.Tx.Commit(ctx)
+	err := t.Tx.Commit(t.ctx)
 	if err == nil {
-		w.committed = true
+		t.committed = true
 	}
 
 	return err
@@ -88,7 +89,6 @@ func runMigrations(config config.DB) error {
 	return nil
 }
 
-func (s *PGXStorage) Close(ctx context.Context) error {
+func (s *PGXStorage) Close() {
 	s.pool.Close()
-	return nil
 }

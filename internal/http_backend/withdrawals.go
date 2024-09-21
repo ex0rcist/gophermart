@@ -1,4 +1,4 @@
-package handlers
+package httpbackend
 
 import (
 	"net/http"
@@ -8,13 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (h *Handlers) WithdrawalListHandler() gin.HandlerFunc {
+func (b *HTTPBackend) WithdrawalListHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		const ep = "UserGetWithdrawalsHandler()" // error prefix
 		ctx := c.Request.Context()
-		currentUser := h.getCurrentUser(c)
+		currentUser := b.getCurrentUser(c)
 
-		wds, err := usecases.WithdrawalList(ctx, h.storage, currentUser)
+		wds, err := usecases.WithdrawalList(ctx, b.storage, currentUser)
 		if err != nil && err != entities.ErrRecordNotFound {
 			handleInternalError(c, ctx, err, ep)
 			return

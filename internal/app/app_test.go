@@ -1,4 +1,4 @@
-package server
+package app
 
 // func TestNew(t *testing.T) {
 // 	server, err := New()

@@ -1,19 +1,20 @@
-package handlers
+package httpbackend
 
 import (
 	"net/http"
 	"strings"
 
+	"github.com/ex0rcist/gophermart/internal/entities"
 	"github.com/ex0rcist/gophermart/internal/models"
 	"github.com/ex0rcist/gophermart/internal/usecases"
 	"github.com/gin-gonic/gin"
 )
 
-func (h *Handlers) OrderCreateHandler() gin.HandlerFunc {
+func (b *HTTPBackend) OrderCreateHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		const ep = "OrderCreateHandler()" // error prefix
 		ctx := c.Request.Context()
-		currentUser := h.getCurrentUser(c)
+		currentUser := b.getCurrentUser(c)
 
 		body, err := c.GetRawData()
 		if err != nil {
@@ -29,7 +30,7 @@ func (h *Handlers) OrderCreateHandler() gin.HandlerFunc {
 		}
 
 		// ищем заказ по номеру
-		existingOrder, err := usecases.OrderFindByNumber(ctx, h.storage, searchForm)
+		existingOrder, err := usecases.OrderFindByNumber(ctx, b.storage, searchForm)
 		if err != nil && err != usecases.ErrOrderNotFound {
 			handleInternalError(c, ctx, err, ep)
 			return
@@ -51,7 +52,7 @@ func (h *Handlers) OrderCreateHandler() gin.HandlerFunc {
 			Status: models.OrderStatusNew,
 		}
 
-		_, err = usecases.OrderCreate(ctx, h.storage, createForm)
+		_, err = usecases.OrderCreate(ctx, b.storage, createForm)
 		if err != nil {
 			handleInternalError(c, ctx, err, ep)
 			return
@@ -59,5 +60,25 @@ func (h *Handlers) OrderCreateHandler() gin.HandlerFunc {
 
 		// приняли в обработку
 		c.Status(http.StatusAccepted)
+	}
+}
+
+func (b *HTTPBackend) OrderListHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		const ep = "OrderListHandler()" // error prefix
+		ctx := c.Request.Context()
+		currentUser := b.getCurrentUser(c)
+
+		orders, err := usecases.OrderList(ctx, b.storage, currentUser)
+		if err != nil && err != entities.ErrRecordNotFound {
+			handleInternalError(c, ctx, err, ep)
+			return
+		}
+
+		if len(orders) == 0 {
+			c.Status(http.StatusNoContent)
+		} else {
+			c.JSON(http.StatusOK, orders)
+		}
 	}
 }

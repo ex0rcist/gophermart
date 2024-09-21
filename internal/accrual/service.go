@@ -34,11 +34,13 @@ func NewService(ctx context.Context, config *config.Accrual, storage *storage.PG
 	}
 }
 
-func (s *Service) Start() {
+func (s *Service) Run() {
+	logging.LogInfoF("starting accrual service, spawning %d workers", runtime.NumCPU())
 	s.spawnWorkers()
+
 	err := s.refillChannel()
 	if err != nil {
-		logging.LogErrorCtx(s.ctx, err)
+		logging.LogError(err, "error refilling accrual channel")
 	}
 
 	go func() {
@@ -46,9 +48,17 @@ func (s *Service) Start() {
 		defer ticker.Stop()
 
 		for range ticker.C {
+			// проверка на остановку приложения
+			select {
+			case <-s.ctx.Done():
+				logging.LogInfo("accrual refilling stopped")
+				return
+			default:
+			}
+
 			err := s.refillChannel()
 			if err != nil {
-				logging.LogErrorCtx(s.ctx, err)
+				logging.LogError(err, "err refilling channel")
 			}
 		}
 	}()
@@ -70,15 +80,18 @@ func (s *Service) SetLockedUntil(lockedUntil time.Time) {
 
 func (s *Service) spawnWorkers() {
 	for i := 0; i < runtime.NumCPU(); i++ {
-		logging.LogDebugCtx(s.ctx, fmt.Sprintf("accrual service: spawning worker %d", i))
-
 		worker := NewWorker(s)
 		go worker.work()
 	}
 }
 
 func (s *Service) refillChannel() error {
-	logging.LogDebugCtx(s.ctx, "refilling channel...")
+	logging.LogDebug("refilling channel...")
+
+	if len(s.taskCh) > 0 {
+		logging.LogDebug("channel still has unread tasks, skipping")
+		return nil
+	}
 
 	orders, err := s.storage.OrderListForUpdate(s.ctx)
 	if err != nil {

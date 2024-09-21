@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/ex0rcist/gophermart/internal/app"
 	"github.com/ex0rcist/gophermart/internal/config"
 	"github.com/ex0rcist/gophermart/internal/logging"
-	"github.com/ex0rcist/gophermart/internal/server"
 )
 
 func main() {
@@ -15,12 +15,12 @@ func main() {
 		logging.LogFatal(err)
 	}
 
-	srv, err := server.New(config)
+	apl, err := app.New(config)
 	if err != nil {
 		logging.LogFatal(err)
 	}
 
-	err = srv.Run()
+	err = apl.Run()
 	if err != nil {
 		logging.LogFatal(err)
 	}

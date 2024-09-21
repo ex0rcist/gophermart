@@ -19,7 +19,7 @@ import (
 type AccrualStatus string
 
 const (
-	StatusNew        AccrualStatus = "REGISTERED"
+	StatusRegistered AccrualStatus = "REGISTERED"
 	StatusInvalid    AccrualStatus = "INVALID"
 	StatusProcessing AccrualStatus = "PROCESSING"
 	StatusProcessed  AccrualStatus = "PROCESSED"
@@ -81,10 +81,9 @@ func (c *Client) GetBonuses(ctx context.Context, orderNumber string) (*Response,
 
 	// 204 - заказ еще не известен бонусной системе;
 	// согласно ТЗ, все заказы рано или поздно появятся в accrual,
-	// поэтому трактуем как NEW
+	// поэтому трактуем как StatusRegistered
 	if res.StatusCode == http.StatusNoContent {
-		logging.LogInfoCtx(ctx, "")
-		return &Response{OrderNumber: orderNumber, Status: StatusNew, Amount: decimal.NewFromInt(0)}, nil
+		return &Response{OrderNumber: orderNumber, Status: StatusRegistered, Amount: decimal.NewFromInt(0)}, nil
 	}
 
 	if res.StatusCode != http.StatusOK {
