@@ -23,42 +23,34 @@ func TestAuthMiddleware_NoToken(t *testing.T) {
 	secret := entities.Secret("test-secret")
 	r.Use(Auth(mockStorage, secret))
 
-	// Создаем тестовый хендлер
 	r.GET("/test", func(c *gin.Context) {
 		c.String(http.StatusOK, "ok")
 	})
 
-	// Симулируем запрос без заголовка Authorization
 	req, _ := http.NewRequest(http.MethodGet, "/test", nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	// Проверяем, что возвращен статус 401 Unauthorized
 	assert.Equal(t, http.StatusUnauthorized, w.Code)
 }
 
 func TestAuthMiddleware_InvalidToken(t *testing.T) {
-	// Создаем тестовый Gin роутер
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
 
-	// Инициализируем middleware
 	mockStorage := new(storage.MockPGXStorage)
 	secret := entities.Secret("test-secret")
 	r.Use(Auth(mockStorage, secret))
 
-	// Создаем тестовый хендлер
 	r.GET("/test", func(c *gin.Context) {
 		c.String(http.StatusOK, "ok")
 	})
 
-	// Симулируем запрос с некорректным токеном
 	req, _ := http.NewRequest(http.MethodGet, "/test", nil)
 	req.Header.Set("Authorization", "invalid-token")
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	// Проверяем, что возвращен статус 401 Unauthorized
 	assert.Equal(t, http.StatusUnauthorized, w.Code)
 }
 
@@ -86,7 +78,6 @@ func TestAuthMiddleware_ExpiredToken(t *testing.T) {
 }
 
 func TestAuthMiddleware_Success(t *testing.T) {
-	// Создаем тестовый Gin роутер
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
 

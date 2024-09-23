@@ -6,6 +6,8 @@ import (
 
 	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/logging"
+	"github.com/ex0rcist/gophermart/internal/utils"
+	"github.com/rs/zerolog/log"
 	"github.com/shopspring/decimal"
 )
 
@@ -22,8 +24,11 @@ func NewTask(service *Service, order *domain.Order) Task {
 }
 
 func (t Task) Handle() error {
+	tCtx, cancel := context.WithTimeout(context.Background(), t.service.contextTimeout)
+	defer cancel()
+
 	// внедряем общую метку в логи запросов и логи сервиса, для облегчения чтения
-	ctx := setupCtxWithRID(context.Background())
+	ctx := setupCtxWithRID(tCtx)
 
 	// получаем статус и баланс из accrual
 	res, err := t.service.client.GetBonuses(ctx, t.order.Number)
@@ -95,4 +100,9 @@ func (t Task) updateOrder(ctx context.Context, status domain.OrderStatus, amount
 	}
 
 	return nil
+}
+
+func setupCtxWithRID(ctx context.Context) context.Context {
+	logger := log.Logger.With().Ctx(ctx).Str("rid", utils.GenerateRequestID()).Logger()
+	return logger.WithContext(ctx)
 }

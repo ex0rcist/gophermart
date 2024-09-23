@@ -3,7 +3,6 @@ package httpbackend
 import (
 	"context"
 	"net/http"
-	"time"
 
 	"github.com/ex0rcist/gophermart/internal/config"
 	"github.com/ex0rcist/gophermart/internal/controller"
@@ -15,8 +14,6 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-const defaultTimeout = 5 * time.Second
-
 type HTTPBackend struct {
 	config     *config.Server
 	httpServer *http.Server
@@ -24,11 +21,7 @@ type HTTPBackend struct {
 	storage    storage.IPGXStorage
 }
 
-func NewHTTPBackend(
-	ctx context.Context,
-	config *config.Server,
-	storage storage.IPGXStorage,
-) *HTTPBackend {
+func NewHTTPBackend(ctx context.Context, config *config.Server, storage storage.IPGXStorage) *HTTPBackend {
 	b := &HTTPBackend{config: config, storage: storage}
 	b.setupRouter()
 	b.setupRoutes()
@@ -73,7 +66,6 @@ func (b *HTTPBackend) setupRoutes() {
 	b.setupUserController(publicRouter, privateRouter)
 	b.setupOrderController(publicRouter, privateRouter)
 	b.setupWithdrawalController(publicRouter, privateRouter)
-
 }
 
 func (b *HTTPBackend) setupUserController(publicRouter *gin.RouterGroup, privateRouter *gin.RouterGroup) {
@@ -81,10 +73,10 @@ func (b *HTTPBackend) setupUserController(publicRouter *gin.RouterGroup, private
 	wdrwRepo := repository.NewWithdrawalRepository(b.storage.GetPool())
 
 	ctrl := &controller.UserController{
-		LoginUsecase:           usecase.NewLoginUsecase(b.storage, userRepo, b.config.Secret, defaultTimeout),
-		RegisterUsecase:        usecase.NewRegisterUsecase(b.storage, userRepo, b.config.Secret, defaultTimeout),
-		GetUserBalanceUsecase:  usecase.NewGetUserBalanceUsecase(b.storage, userRepo, defaultTimeout),
-		WithdrawBalanceUsecase: usecase.NewWithdrawBalanceUsecase(b.storage, userRepo, wdrwRepo, defaultTimeout),
+		LoginUsecase:           usecase.NewLoginUsecase(b.storage, userRepo, b.config.Secret, b.config.Timeout),
+		RegisterUsecase:        usecase.NewRegisterUsecase(b.storage, userRepo, b.config.Secret, b.config.Timeout),
+		GetUserBalanceUsecase:  usecase.NewGetUserBalanceUsecase(b.storage, userRepo, b.config.Timeout),
+		WithdrawBalanceUsecase: usecase.NewWithdrawBalanceUsecase(b.storage, userRepo, wdrwRepo, b.config.Timeout),
 	}
 
 	publicRouter.POST("/api/user/register", ctrl.Register)
@@ -98,8 +90,8 @@ func (b *HTTPBackend) setupOrderController(_ *gin.RouterGroup, privateRouter *gi
 	repo := repository.NewOrderRepository(b.storage.GetPool())
 
 	ctrl := &controller.OrderController{
-		OrderCreateUsecase: usecase.NewOrderCreateUsecase(b.storage, repo, defaultTimeout),
-		OrderListUsecase:   usecase.NewOrderListUsecase(b.storage, repo, defaultTimeout),
+		OrderCreateUsecase: usecase.NewOrderCreateUsecase(b.storage, repo, b.config.Timeout),
+		OrderListUsecase:   usecase.NewOrderListUsecase(b.storage, repo, b.config.Timeout),
 	}
 
 	privateRouter.POST("/api/user/orders", ctrl.CreateOrder)
@@ -110,7 +102,7 @@ func (b *HTTPBackend) setupWithdrawalController(_ *gin.RouterGroup, privateRoute
 	repo := repository.NewWithdrawalRepository(b.storage.GetPool())
 
 	ctrl := &controller.WithdrawalController{
-		WithdrawalListUsecase: usecase.NewWithdrawalListUsecase(b.storage, repo, defaultTimeout),
+		WithdrawalListUsecase: usecase.NewWithdrawalListUsecase(b.storage, repo, b.config.Timeout),
 	}
 
 	privateRouter.GET("/api/user/withdrawals", ctrl.WithdrawalList)

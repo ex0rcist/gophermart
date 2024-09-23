@@ -22,13 +22,13 @@ type DB struct {
 
 type Server struct {
 	Address string `env:"RUN_ADDRESS"`
-	Timeout int
+	Timeout time.Duration
 	Secret  entities.Secret `env:"APP_KEY"`
 }
 
 type Accrual struct {
 	Address        string `env:"ACCRUAL_SYSTEM_ADDRESS"`
-	Timeout        int
+	Timeout        time.Duration
 	RefillInterval time.Duration
 }
 
@@ -69,12 +69,12 @@ func NewDefault(_ *Config) (*Config, error) {
 		},
 		Server: Server{
 			Address: "0.0.0.0:8080",
-			Timeout: 60,
+			Timeout: 5 * time.Second,
 		},
 		Accrual: Accrual{
 			Address:        "0.0.0.0:8181",
 			RefillInterval: 5 * time.Second,
-			Timeout:        60,
+			Timeout:        5 * time.Second,
 		},
 	}
 

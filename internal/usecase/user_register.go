@@ -25,7 +25,7 @@ func NewRegisterUsecase(storage storage.IPGXStorage, repo domain.IUserRepository
 func (uc *registerUsecase) Call(ctx context.Context, form domain.RegisterRequest) (string, error) {
 	// находим пользователя
 	existingUser, err := uc.GetUserByLogin(ctx, form)
-	if err != nil && err != entities.ErrRecordNotFound {
+	if err != nil && err != storage.ErrRecordNotFound {
 		return "", err
 	}
 	if existingUser != nil {

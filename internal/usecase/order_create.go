@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/ex0rcist/gophermart/internal/domain"
-	"github.com/ex0rcist/gophermart/internal/entities"
 	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/ex0rcist/gophermart/internal/utils"
 )
@@ -53,10 +52,13 @@ func (uc *orderCreateUsecase) Create(ctx context.Context, user *domain.User, num
 }
 
 func (uc *orderCreateUsecase) OrderFindByNumber(ctx context.Context, number string) (*domain.Order, error) {
-	order, err := uc.repo.OrderFindByNumber(ctx, number)
+	tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	order, err := uc.repo.OrderFindByNumber(tCtx, number)
 
 	if err != nil {
-		if err == entities.ErrRecordNotFound {
+		if err == storage.ErrRecordNotFound {
 			return nil, domain.ErrOrderNotFound
 		}
 

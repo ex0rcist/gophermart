@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/ex0rcist/gophermart/internal/domain"
-	"github.com/ex0rcist/gophermart/internal/entities"
+	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +16,6 @@ type OrderController struct {
 
 func (ctrl *OrderController) CreateOrder(c *gin.Context) {
 	const errorPrefix = "OrderController -> CreateOrder()"
-
 	ctx := c.Request.Context()
 	currentUser := getCurrentUser(c)
 
@@ -50,12 +49,11 @@ func (ctrl *OrderController) CreateOrder(c *gin.Context) {
 }
 func (ctrl *OrderController) OrderList(c *gin.Context) {
 	const errorPrefix = "OrderController -> OrderList()"
-
 	ctx := c.Request.Context()
 	currentUser := getCurrentUser(c)
 
 	orders, err := ctrl.OrderListUsecase.Call(ctx, currentUser)
-	if err != nil && err != entities.ErrRecordNotFound {
+	if err != nil && err != storage.ErrRecordNotFound {
 		handleInternalError(c, ctx, err, errorPrefix)
 		return
 	}

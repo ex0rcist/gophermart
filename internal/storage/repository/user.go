@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/ex0rcist/gophermart/internal/domain"
-	"github.com/ex0rcist/gophermart/internal/entities"
 	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/jackc/pgx/v5"
 	"github.com/shopspring/decimal"
@@ -38,7 +37,7 @@ func (repo *userRepository) UserCreate(ctx context.Context, login string, passwo
 	}
 
 	if err = rows.Err(); err != nil {
-		return nil, fmt.Errorf("PGXStorage -> UserCreate() error: %w", err)
+		return nil, fmt.Errorf("userRepository -> UserCreate() error: %w", err)
 	}
 
 	return user, nil
@@ -55,9 +54,9 @@ func (repo *userRepository) UserFindByLogin(ctx context.Context, login string) (
 
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, entities.ErrRecordNotFound
+			return nil, storage.ErrRecordNotFound
 		}
-		return nil, fmt.Errorf("PGXStorage -> UserFindByLogin() error: %w", err)
+		return nil, fmt.Errorf("userRepository -> UserFindByLogin() error: %w", err)
 	}
 
 	return user, nil
@@ -78,9 +77,9 @@ func (repo *userRepository) UserGetBalance(ctx context.Context, tx pgx.Tx, id do
 
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, nil, entities.ErrRecordNotFound
+			return nil, nil, storage.ErrRecordNotFound
 		}
-		return nil, nil, fmt.Errorf("PGXStorage -> UserGetBalance() error: %w", err)
+		return nil, nil, fmt.Errorf("userRepository -> UserGetBalance() error: %w", err)
 	}
 
 	return &b, &w, nil
@@ -117,7 +116,7 @@ func (repo *userRepository) UserUpdateBalanceAndWithdrawals(ctx context.Context,
 	}
 
 	if err != nil {
-		return fmt.Errorf("PGXStorage -> UserUpdateBalanceAndWithdrawals() error: %w", err)
+		return fmt.Errorf("userRepository -> UserUpdateBalanceAndWithdrawals() error: %w", err)
 	}
 
 	return nil

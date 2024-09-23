@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/ex0rcist/gophermart/internal/domain"
-	"github.com/ex0rcist/gophermart/internal/entities"
 	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/jackc/pgx/v5"
 )
@@ -29,7 +28,7 @@ func (repo *withdrawalRepository) WithdrawalCreate(ctx context.Context, tx pgx.T
 		_, err = repo.pool.Exec(ctx, stmt, w.UserID, w.OrderNumber, w.Amount)
 	}
 	if err != nil {
-		return fmt.Errorf("PGXStorage -> WithdrawalCreate() error: %w", err)
+		return fmt.Errorf("withdrawalRepository -> WithdrawalCreate() error: %w", err)
 	}
 
 	return nil
@@ -42,17 +41,17 @@ func (repo *withdrawalRepository) WithdrawalList(ctx context.Context, userID dom
 	rows, err := repo.pool.Query(ctx, stmt, userID)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, entities.ErrRecordNotFound
+			return nil, storage.ErrRecordNotFound
 		}
 
-		return nil, fmt.Errorf("PGXStorage -> WithdrawalList() error: %w", err)
+		return nil, fmt.Errorf("withdrawalRepository -> WithdrawalList() error: %w", err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		wd := &domain.Withdrawal{}
 		if err = rows.Scan(&wd.OrderNumber, &wd.Amount, &wd.CreatedAt); err != nil {
-			return nil, fmt.Errorf("PGXStorage -> WithdrawalList() error: %w", err)
+			return nil, fmt.Errorf("withdrawalRepository -> WithdrawalList() error: %w", err)
 		}
 		wds = append(wds, wd)
 	}

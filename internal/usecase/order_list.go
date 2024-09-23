@@ -20,7 +20,10 @@ func NewOrderListUsecase(storage storage.IPGXStorage, repo domain.IOrderReposito
 }
 
 func (uc *orderListUsecase) Call(ctx context.Context, user *domain.User) ([]*domain.OrderListResult, error) {
-	orders, err := uc.repo.OrderList(ctx, user.ID)
+	tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	orders, err := uc.repo.OrderList(tCtx, user.ID)
 	if err != nil {
 		return nil, err
 	}

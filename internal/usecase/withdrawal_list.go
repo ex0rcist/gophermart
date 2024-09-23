@@ -20,7 +20,10 @@ func NewWithdrawalListUsecase(storage storage.IPGXStorage, repo domain.IWithdraw
 }
 
 func (uc *withdrawalListUsecase) Call(ctx context.Context, u *domain.User) ([]*domain.WithdrawalListResult, error) {
-	wds, err := uc.repo.WithdrawalList(ctx, u.ID)
+	tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	wds, err := uc.repo.WithdrawalList(tCtx, u.ID)
 	if err != nil {
 		return nil, err
 	}

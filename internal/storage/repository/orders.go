@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/ex0rcist/gophermart/internal/domain"
-	"github.com/ex0rcist/gophermart/internal/entities"
 	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/jackc/pgx/v5"
 )
@@ -24,7 +23,7 @@ func (repo *orderRepository) OrderCreate(ctx context.Context, order domain.Order
 
 	rows, err := repo.pool.Query(ctx, stmt, order.UserID, order.Number, order.Status)
 	if err != nil {
-		return nil, fmt.Errorf("PGXStorage -> OrderCreate() error: %w", err)
+		return nil, fmt.Errorf("orderRepository -> OrderCreate() error: %w", err)
 	}
 	defer rows.Close()
 
@@ -35,7 +34,7 @@ func (repo *orderRepository) OrderCreate(ctx context.Context, order domain.Order
 			&newOrder.Accrual, &newOrder.CreatedAt, &newOrder.UpdatedAt,
 		)
 		if err != nil {
-			return nil, fmt.Errorf("PGXStorage -> OrderCreate() error: %w", err)
+			return nil, fmt.Errorf("orderRepository -> OrderCreate() error: %w", err)
 		}
 	}
 
@@ -49,17 +48,17 @@ func (repo *orderRepository) OrderList(ctx context.Context, userID domain.UserID
 	rows, err := repo.pool.Query(ctx, stmt, userID)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, entities.ErrRecordNotFound
+			return nil, storage.ErrRecordNotFound
 		}
 
-		return nil, fmt.Errorf("PGXStorage -> OrderList() error: %w", err)
+		return nil, fmt.Errorf("orderRepository -> OrderList() error: %w", err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		order := &domain.Order{}
 		if err = rows.Scan(&order.Number, &order.Status, &order.Accrual, &order.CreatedAt); err != nil {
-			return nil, fmt.Errorf("PGXStorage -> OrderList() error: %w", err)
+			return nil, fmt.Errorf("orderRepository -> OrderList() error: %w", err)
 		}
 		orders = append(orders, order)
 	}
@@ -77,9 +76,9 @@ func (repo *orderRepository) OrderFindByNumber(ctx context.Context, number strin
 	)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, entities.ErrRecordNotFound
+			return nil, storage.ErrRecordNotFound
 		}
-		return nil, fmt.Errorf("PGXStorage -> OrderFindByNumber() error: %w", err)
+		return nil, fmt.Errorf("orderRepository -> OrderFindByNumber() error: %w", err)
 	}
 
 	return order, nil
@@ -92,7 +91,7 @@ func (repo *orderRepository) OrderListForUpdate(ctx context.Context) ([]*domain.
 	rows, err := repo.pool.Query(ctx, stmt)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, entities.ErrRecordNotFound
+			return nil, storage.ErrRecordNotFound
 		}
 		return nil, err
 	}
@@ -100,14 +99,14 @@ func (repo *orderRepository) OrderListForUpdate(ctx context.Context) ([]*domain.
 	for rows.Next() {
 		order := &domain.Order{}
 		if err = rows.Scan(&order.ID, &order.UserID, &order.Number, &order.Status, &order.CreatedAt); err != nil {
-			return nil, fmt.Errorf("PGXStorage -> OrderListForUpdate() error: %w", err)
+			return nil, fmt.Errorf("orderRepository -> OrderListForUpdate() error: %w", err)
 		}
 		orders = append(orders, order)
 	}
 
 	err = rows.Err()
 	if err != nil {
-		return nil, fmt.Errorf("PGXStorage -> OrderListForUpdate() error: %w", err)
+		return nil, fmt.Errorf("orderRepository -> OrderListForUpdate() error: %w", err)
 	}
 
 	return orders, nil
@@ -124,7 +123,7 @@ func (repo *orderRepository) OrderUpdate(ctx context.Context, tx pgx.Tx, order d
 	}
 
 	if err != nil {
-		return fmt.Errorf("PGXStorage -> OrderUpdate() error: %w", err)
+		return fmt.Errorf("orderRepository -> OrderUpdate() error: %w", err)
 	}
 
 	return nil

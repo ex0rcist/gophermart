@@ -19,16 +19,13 @@ func NewWorker(service *Service) Worker {
 
 func (w Worker) work() {
 	for {
-		// если сервис заблокирован (429), ждем до разблокировки
-		if time.Now().Before(w.service.lockedUntil) {
-			time.Sleep(time.Until(w.service.lockedUntil))
-		}
-
 		select {
 		case <-w.service.ctx.Done():
 			logging.LogDebug("accrual worker stopping")
 			return
-		default:
+		case <-time.After(time.Until(w.service.lockedUntil)):
+			// сработает немедленно, если значение <= 0
+			// т.е. продолжит выполнение итерации
 		}
 
 		task := <-w.service.taskCh

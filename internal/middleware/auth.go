@@ -4,6 +4,7 @@ import (
 	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/entities"
 	"github.com/ex0rcist/gophermart/internal/logging"
+	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/ex0rcist/gophermart/pkg/jwt"
 	"github.com/gin-gonic/gin"
 
@@ -45,7 +46,7 @@ func Auth(
 
 		user, err := repo.UserFindByLogin(ctx, login)
 		if err != nil {
-			if err == entities.ErrRecordNotFound {
+			if err == storage.ErrRecordNotFound {
 				logging.LogInfoCtx(ctx, "auth: login not found")
 				c.Status(http.StatusUnauthorized)
 			} else {

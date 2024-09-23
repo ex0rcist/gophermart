@@ -11,7 +11,6 @@ import (
 	"github.com/ex0rcist/gophermart/internal/logging"
 	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/ex0rcist/gophermart/internal/storage/repository"
-	"github.com/ex0rcist/gophermart/internal/utils"
 )
 
 type Service struct {
@@ -24,21 +23,24 @@ type Service struct {
 
 	taskCh chan Task
 
+	contextTimeout time.Duration
 	refillInterval time.Duration
-	lockedUntil    time.Time
+
+	lockedUntil time.Time
 }
 
 func NewService(ctx context.Context, config *config.Accrual, storage *storage.PGXStorage) *Service {
 	return &Service{
 		ctx: ctx,
 
-		client:    NewClient(config.Address, utils.IntToDuration(config.Timeout)),
+		client:    NewClient(config.Address, config.Timeout),
 		storage:   storage,
 		userRepo:  repository.NewUserRepository(storage.GetPool()),
 		orderRepo: repository.NewOrderRepository(storage.GetPool()),
 
 		taskCh: make(chan Task),
 
+		contextTimeout: config.Timeout,
 		refillInterval: config.RefillInterval,
 	}
 }
@@ -53,21 +55,16 @@ func (s *Service) Run() {
 	}
 
 	go func() {
-		ticker := time.NewTicker(s.refillInterval)
-		defer ticker.Stop()
-
-		for range ticker.C {
-			// проверка на остановку приложения
+		for {
 			select {
-			case <-s.ctx.Done():
+			case <-s.ctx.Done(): // проверка на остановку приложения
 				logging.LogInfo("accrual refilling stopped")
 				return
-			default:
-			}
-
-			err := s.refillChannel()
-			if err != nil {
-				logging.LogError(err, "err refilling channel")
+			case <-time.After(s.refillInterval): // если не остановлено, выполняем заправку канала
+				err := s.refillChannel()
+				if err != nil {
+					logging.LogError(err, "err refilling channel")
+				}
 			}
 		}
 	}()
@@ -97,6 +94,7 @@ func (s *Service) spawnWorkers() {
 func (s *Service) refillChannel() error {
 	logging.LogDebug("refilling channel...")
 
+	// частично исключаем дублирование задач
 	if len(s.taskCh) > 0 {
 		logging.LogDebug("channel still has unread tasks, skipping")
 		return nil

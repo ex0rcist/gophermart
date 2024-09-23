@@ -44,7 +44,7 @@ func (uc *loginUsecase) GetUserByLogin(ctx context.Context, req domain.LoginRequ
 
 	user, err := uc.repo.UserFindByLogin(tCtx, req.Login)
 	if err != nil {
-		if err == entities.ErrRecordNotFound {
+		if err == storage.ErrRecordNotFound {
 			return nil, domain.ErrInvalidLoginOrPassword
 		}
 

@@ -185,22 +185,6 @@ func (m *PGXTxMock) Conn() *pgx.Conn {
 	return mArgs.Get(0).(*pgx.Conn)
 }
 
-// ************** MockMigrator (IMigrator) ************** //
-
-type MockMigrator struct {
-	mock.Mock
-}
-
-func (m *MockMigrator) Up() error {
-	args := m.Called()
-	return args.Error(0)
-}
-
-func (m *MockMigrator) Close() (error, error) {
-	args := m.Called()
-	return args.Error(0), args.Error(1)
-}
-
 // ************** PGXStorage ************** //
 
 type MockPGXStorage struct {

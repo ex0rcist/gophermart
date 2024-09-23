@@ -7,6 +7,7 @@ import (
 	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/logging"
 	"github.com/ex0rcist/gophermart/internal/storage"
+	"github.com/ex0rcist/gophermart/internal/utils"
 )
 
 type withdrawBalanceUsecase struct {
@@ -24,6 +25,11 @@ func (uc *withdrawBalanceUsecase) Call(ctx context.Context, user *domain.User, f
 	tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
 
+	// валидируем номер заказа
+	if !utils.LuhnCheck(form.OrderNumber) {
+		return domain.ErrInvalidOrderNumber
+	}
+
 	// стартуем транзакцию
 	tx, err := uc.storage.StartTx(tCtx)
 	if err != nil {
@@ -38,7 +44,7 @@ func (uc *withdrawBalanceUsecase) Call(ctx context.Context, user *domain.User, f
 	}()
 
 	// получаем активный баланс, транзакция блокирует user.balance и user.withdrawn
-	b, _, err := uc.userRepo.UserGetBalance(ctx, tx.Tx, user.ID)
+	b, _, err := uc.userRepo.UserGetBalance(tCtx, tx.Tx, user.ID)
 	if err != nil {
 		return err
 	}
@@ -49,7 +55,7 @@ func (uc *withdrawBalanceUsecase) Call(ctx context.Context, user *domain.User, f
 	}
 
 	// создаем списание
-	err = uc.wdrwRepo.WithdrawalCreate(ctx, tx.Tx, domain.Withdrawal{UserID: user.ID, OrderNumber: form.OrderNumber, Amount: form.Amount})
+	err = uc.wdrwRepo.WithdrawalCreate(tCtx, tx.Tx, domain.Withdrawal{UserID: user.ID, OrderNumber: form.OrderNumber, Amount: form.Amount})
 	if err != nil {
 		logging.LogErrorCtx(ctx, err, "UserWithdrawBalance(): error creating withdrawal")
 		return err

@@ -15,9 +15,9 @@ type UserController struct {
 }
 
 func (ctrl *UserController) Login(c *gin.Context) {
+	const errorPrefix = "UserController -> Login()"
 	var form domain.LoginRequest
 	ctx := c.Request.Context()
-	const errorPrefix = "UserController -> Login()"
 
 	err := c.ShouldBindJSON(&form)
 	if err != nil {
@@ -41,9 +41,9 @@ func (ctrl *UserController) Login(c *gin.Context) {
 }
 
 func (ctrl *UserController) Register(c *gin.Context) {
+	const errorPrefix = "UserController -> Register()"
 	var form domain.RegisterRequest
 	ctx := c.Request.Context()
-	const errorPrefix = "UserController -> Register()" // error prefix
 
 	err := c.ShouldBindJSON(&form)
 	if err != nil {
@@ -67,13 +67,13 @@ func (ctrl *UserController) Register(c *gin.Context) {
 }
 
 func (ctrl *UserController) GetUserBalance(c *gin.Context) {
-	const ep = "GetUserBalance()" // error prefix
+	const errorPrefix = "UserController -> GetUserBalance()"
 	ctx := c.Request.Context()
 	currentUser := getCurrentUser(c)
 
 	bl, err := ctrl.GetUserBalanceUsecase.Fetch(ctx, currentUser.ID)
 	if err != nil {
-		handleInternalError(c, ctx, err, ep)
+		handleInternalError(c, ctx, err, errorPrefix)
 		return
 	}
 
@@ -81,7 +81,7 @@ func (ctrl *UserController) GetUserBalance(c *gin.Context) {
 }
 
 func (ctrl *UserController) WithdrawBalance(c *gin.Context) {
-	const ep = "WithdrawBalance()" // error prefix
+	const ep = "UserController -> WithdrawBalance()"
 	ctx := c.Request.Context()
 	currentUser := getCurrentUser(c)
 
@@ -93,6 +93,11 @@ func (ctrl *UserController) WithdrawBalance(c *gin.Context) {
 
 	err := ctrl.WithdrawBalanceUsecase.Call(ctx, currentUser, form)
 	switch {
+	case err == domain.ErrInvalidOrderNumber:
+		// тут уже вторая валидация на Luhn,
+		// первая в form (для общего развития)
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
 	case err == domain.ErrInsufficientUserBalance:
 		c.Status(http.StatusPaymentRequired)
 		return
