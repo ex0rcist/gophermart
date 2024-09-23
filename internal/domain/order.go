@@ -54,7 +54,7 @@ type IOrderRepository interface {
 // ========== OrderList ========== //
 
 type IOrderListUsecase interface {
-	Call(c context.Context, user *User) ([]*OrderListResult, error)
+	Call(ctx context.Context, user *User) ([]*OrderListResult, error)
 }
 
 type OrderListResult struct {
@@ -72,7 +72,7 @@ var ErrOrderConflict = errors.New("order number already registered by another us
 var ErrInvalidOrderNumber = errors.New("invalid order number")
 
 type IOrderCreateUsecase interface {
-	Create(c context.Context, user *User, number string) (*Order, error)
+	Create(ctx context.Context, user *User, number string) (*Order, error)
 	OrderFindByNumber(ctx context.Context, number string) (*Order, error)
 }
 

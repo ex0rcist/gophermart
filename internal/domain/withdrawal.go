@@ -27,7 +27,7 @@ type IWithdrawalRepository interface {
 // ========== WithdrawalList ========== //
 
 type IWithdrawalListUsecase interface {
-	Call(c context.Context, user *User) ([]*WithdrawalListResult, error)
+	Call(ctx context.Context, user *User) ([]*WithdrawalListResult, error)
 }
 
 type WithdrawalListResult struct {

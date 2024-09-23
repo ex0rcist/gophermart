@@ -17,11 +17,11 @@ func NewGetUserBalanceUsecase(repo domain.IUserRepository, timeout time.Duration
 	return &getUserBalanceUsecase{repo: repo, contextTimeout: timeout}
 }
 
-func (uc *getUserBalanceUsecase) Fetch(c context.Context, id domain.UserID) (*domain.GetUserBalanceResult, error) {
-	ctx, cancel := context.WithTimeout(c, uc.contextTimeout)
+func (uc *getUserBalanceUsecase) Fetch(ctx context.Context, id domain.UserID) (*domain.GetUserBalanceResult, error) {
+	tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
 
-	b, w, err := uc.repo.UserGetBalance(ctx, nil, id)
+	b, w, err := uc.repo.UserGetBalance(tCtx, nil, id)
 	if err != nil {
 		return nil, err
 	}

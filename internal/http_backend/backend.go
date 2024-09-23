@@ -81,8 +81,8 @@ func (b *HTTPBackend) setupUserController(publicRouter *gin.RouterGroup, private
 	wdrwRepo := repository.NewWithdrawalRepository(b.storage.GetPool())
 
 	ctrl := &controller.UserController{
-		LoginUsecase:           usecase.NewLoginUsecase(userRepo, defaultTimeout),
-		RegisterUsecase:        usecase.NewRegisterUsecase(userRepo, defaultTimeout),
+		LoginUsecase:           usecase.NewLoginUsecase(userRepo, b.config.Secret, defaultTimeout),
+		RegisterUsecase:        usecase.NewRegisterUsecase(userRepo, b.config.Secret, defaultTimeout),
 		GetUserBalanceUsecase:  usecase.NewGetUserBalanceUsecase(userRepo, defaultTimeout),
 		WithdrawBalanceUsecase: usecase.NewWithdrawBalanceUsecase(userRepo, wdrwRepo, defaultTimeout),
 	}

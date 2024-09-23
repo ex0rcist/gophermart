@@ -40,7 +40,8 @@ type LoginRequest struct {
 }
 
 type ILoginUsecase interface {
-	GetUserByLogin(c context.Context, req LoginRequest) (*User, error)
+	Call(ctx context.Context, form LoginRequest) (string, error)
+	GetUserByLogin(ctx context.Context, req LoginRequest) (*User, error)
 	ComparePassword(user *User, password string) error
 	CreateAccessToken(user *User, secret entities.Secret, lifetime time.Duration) (string, error)
 }
@@ -55,15 +56,16 @@ type RegisterRequest struct {
 }
 
 type IRegisterUsecase interface {
-	GetUserByLogin(c context.Context, req RegisterRequest) (*User, error)
-	CreateUser(c context.Context, login string, password string) (*User, error)
+	Call(ctx context.Context, form RegisterRequest) (string, error)
+	GetUserByLogin(ctx context.Context, form RegisterRequest) (*User, error)
+	CreateUser(ctx context.Context, login string, password string) (*User, error)
 	CreateAccessToken(user *User, secret entities.Secret, lifetime time.Duration) (string, error)
 }
 
 // ========== GetUserBalance ========== //
 
 type IGetUserBalanceUsecase interface {
-	Fetch(c context.Context, id UserID) (*GetUserBalanceResult, error)
+	Fetch(ctx context.Context, id UserID) (*GetUserBalanceResult, error)
 }
 
 type GetUserBalanceResult struct {
@@ -81,5 +83,5 @@ type WithdrawBalanceRequest struct {
 }
 
 type IWithdrawBalanceUsecase interface {
-	Call(c context.Context, user *User, req WithdrawBalanceRequest) error
+	Call(ctx context.Context, user *User, req WithdrawBalanceRequest) error
 }

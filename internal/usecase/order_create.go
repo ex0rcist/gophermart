@@ -18,8 +18,8 @@ func NewOrderCreateUsecase(repo domain.IOrderRepository, timeout time.Duration) 
 	return &orderCreateUsecase{repo: repo, contextTimeout: timeout}
 }
 
-func (uc *orderCreateUsecase) Create(c context.Context, user *domain.User, number string) (*domain.Order, error) {
-	ctx, cancel := context.WithTimeout(c, uc.contextTimeout)
+func (uc *orderCreateUsecase) Create(ctx context.Context, user *domain.User, number string) (*domain.Order, error) {
+	tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
 
 	// валидируем номер заказа
@@ -28,7 +28,7 @@ func (uc *orderCreateUsecase) Create(c context.Context, user *domain.User, numbe
 	}
 
 	// ищем заказ по номеру
-	existingOrder, err := uc.OrderFindByNumber(ctx, number)
+	existingOrder, err := uc.OrderFindByNumber(tCtx, number)
 	if err != nil && err != domain.ErrOrderNotFound {
 		return nil, err
 	}

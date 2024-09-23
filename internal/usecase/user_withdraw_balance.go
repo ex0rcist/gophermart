@@ -20,12 +20,12 @@ func NewWithdrawBalanceUsecase(userRepo domain.IUserRepository, wdrwRepo domain.
 	return &withdrawBalanceUsecase{userRepo: userRepo, wdrwRepo: wdrwRepo, contextTimeout: timeout}
 }
 
-func (uc *withdrawBalanceUsecase) Call(c context.Context, user *domain.User, form domain.WithdrawBalanceRequest) error {
-	ctx, cancel := context.WithTimeout(c, uc.contextTimeout)
+func (uc *withdrawBalanceUsecase) Call(ctx context.Context, user *domain.User, form domain.WithdrawBalanceRequest) error {
+	tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
 
 	// стартуем транзакцию
-	tx, err := uc.storage.StartTx(ctx)
+	tx, err := uc.storage.StartTx(tCtx)
 	if err != nil {
 		logging.LogErrorCtx(ctx, err, "withdrawBalanceUsecase(): error starting tx")
 		return err

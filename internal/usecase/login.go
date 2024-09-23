@@ -12,18 +12,44 @@ import (
 
 type loginUsecase struct {
 	repo           domain.IUserRepository
+	secret         entities.Secret
 	contextTimeout time.Duration
 }
 
-func NewLoginUsecase(repo domain.IUserRepository, timeout time.Duration) domain.ILoginUsecase {
-	return &loginUsecase{repo: repo, contextTimeout: timeout}
+func NewLoginUsecase(repo domain.IUserRepository, secret entities.Secret, timeout time.Duration) domain.ILoginUsecase {
+	return &loginUsecase{repo: repo, contextTimeout: timeout, secret: secret}
 }
 
-func (uc *loginUsecase) GetUserByLogin(c context.Context, req domain.LoginRequest) (*domain.User, error) {
-	ctx, cancel := context.WithTimeout(c, uc.contextTimeout)
+func (uc *loginUsecase) Call(ctx context.Context, form domain.LoginRequest) (string, error) {
+	// находим пользователя
+	user, err := uc.GetUserByLogin(ctx, form)
+	if err != nil {
+		return "", err
+	}
+
+	// создаем JWT токен
+	token, err := uc.CreateAccessToken(user, uc.secret, domain.LoginTokenLifetime)
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
+}
+
+func (uc *loginUsecase) GetUserByLogin(ctx context.Context, req domain.LoginRequest) (*domain.User, error) {
+	tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
 
-	return uc.repo.UserFindByLogin(ctx, req.Login)
+	user, err := uc.repo.UserFindByLogin(tCtx, req.Login)
+	if err != nil {
+		if err == entities.ErrRecordNotFound {
+			return nil, domain.ErrInvalidLoginOrPassword
+		}
+
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (uc *loginUsecase) ComparePassword(user *domain.User, password string) error {
