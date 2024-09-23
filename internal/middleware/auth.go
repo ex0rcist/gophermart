@@ -1,9 +1,9 @@
 package middleware
 
 import (
+	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/entities"
 	"github.com/ex0rcist/gophermart/internal/logging"
-	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/ex0rcist/gophermart/pkg/jwt"
 	"github.com/gin-gonic/gin"
 
@@ -14,7 +14,7 @@ import (
 const UserContextKey = "currentUser"
 
 func Auth(
-	storage *storage.PGXStorage,
+	repo domain.IUserRepository,
 	key entities.Secret,
 ) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -43,7 +43,7 @@ func Auth(
 			return
 		}
 
-		user, err := storage.UserFindByLogin(ctx, login)
+		user, err := repo.UserFindByLogin(ctx, login)
 		if err != nil {
 			if err == entities.ErrRecordNotFound {
 				logging.LogInfoCtx(ctx, "auth: login not found")

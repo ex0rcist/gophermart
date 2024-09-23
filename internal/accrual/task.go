@@ -4,18 +4,17 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/logging"
-	"github.com/ex0rcist/gophermart/internal/models"
-	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/shopspring/decimal"
 )
 
 type Task struct {
 	service *Service
-	order   *models.Order
+	order   *domain.Order
 }
 
-func NewTask(service *Service, order *models.Order) Task {
+func NewTask(service *Service, order *domain.Order) Task {
 	return Task{
 		service: service,
 		order:   order,
@@ -41,8 +40,8 @@ func (t Task) Handle() error {
 	case StatusProcessing:
 		// в обработке; если статус в базе не совпадает, обновляем
 		logging.LogInfoCtx(ctx, fmt.Sprintf("%s is still in processing", t.order))
-		if t.order.Status != models.OrderStatusProcessing {
-			err := t.updateOrder(ctx, models.OrderStatusProcessing, decimal.NewFromInt(0))
+		if t.order.Status != domain.OrderStatusProcessing {
+			err := t.updateOrder(ctx, domain.OrderStatusProcessing, decimal.NewFromInt(0))
 			if err != nil {
 				return err
 			}
@@ -51,7 +50,7 @@ func (t Task) Handle() error {
 	case StatusInvalid:
 		// invalid; обновляем статус
 		logging.LogInfoCtx(ctx, fmt.Sprintf("%s is invalid", t.order))
-		err := t.updateOrder(ctx, models.OrderStatusInvalid, decimal.NewFromInt(0))
+		err := t.updateOrder(ctx, domain.OrderStatusInvalid, decimal.NewFromInt(0))
 		if err != nil {
 			return err
 		}
@@ -59,7 +58,7 @@ func (t Task) Handle() error {
 	case StatusProcessed:
 		// обработан; обновляем статус и сумму накоплений
 		logging.LogInfoCtx(ctx, fmt.Sprintf("%s processed, accrual=%s", t.order, res.Amount))
-		err := t.updateOrder(ctx, models.OrderStatusProcessed, res.Amount)
+		err := t.updateOrder(ctx, domain.OrderStatusProcessed, res.Amount)
 		if err != nil {
 			return err
 		}
@@ -68,9 +67,7 @@ func (t Task) Handle() error {
 	return nil
 }
 
-func (t Task) updateOrder(ctx context.Context, status models.OrderStatus, amount decimal.Decimal) error {
-	d := storage.OrderUpdateDTO{ID: t.order.ID, Status: status, Accrual: amount}
-
+func (t Task) updateOrder(ctx context.Context, status domain.OrderStatus, amount decimal.Decimal) error {
 	tx, err := t.service.storage.StartTx(ctx)
 	if err != nil {
 		return err
@@ -82,12 +79,12 @@ func (t Task) updateOrder(ctx context.Context, status models.OrderStatus, amount
 		}
 	}()
 
-	err = t.service.storage.OrderUpdate(ctx, tx.Tx, d)
+	err = t.service.orderRepo.OrderUpdate(ctx, tx.Tx, domain.Order{ID: t.order.ID, Status: status, Accrual: amount})
 	if err != nil {
 		return err
 	}
 
-	err = t.service.storage.UserUpdateBalanceAndWithdrawals(ctx, tx.Tx, t.order.UserID)
+	err = t.service.userRepo.UserUpdateBalanceAndWithdrawals(ctx, tx.Tx, t.order.UserID)
 	if err != nil {
 		return err
 	}

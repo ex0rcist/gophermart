@@ -2,32 +2,65 @@ package storage
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/ex0rcist/gophermart/internal/config"
+	"github.com/ex0rcist/gophermart/internal/logging"
+	"github.com/ex0rcist/gophermart/internal/storage/tracer"
+	"github.com/golang-migrate/migrate/v4"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
+var _ IPGXStorage = (*PGXStorage)(nil)
+
 type PGXStorage struct {
-	pool *pgxpool.Pool
+	pool IPGXPool
 }
 
-func NewPGXStorage(config config.DB) (*PGXStorage, error) {
-	ctx := context.Background()
+func NewPGXStorage(config config.DB, pool IPGXPool, migrate bool) (*PGXStorage, error) {
+	var err error
 
-	err := runMigrations(config)
-	if err != nil {
-		return nil, fmt.Errorf("migrations failed: %w", err)
+	if migrate {
+		if err := runMigrations(config); err != nil {
+			return nil, fmt.Errorf("runMigrations() failed: %w", err)
+		}
 	}
 
+	if pool == nil {
+		pool, err = createPool(context.Background(), config)
+		if err != nil {
+			return nil, fmt.Errorf("create pool failed: %w", err)
+		}
+	}
+
+	return &PGXStorage{pool: pool}, err
+}
+
+func (s *PGXStorage) StartTx(ctx context.Context) (*PGXTx, error) {
+	tx, err := s.pool.BeginTx(ctx, pgx.TxOptions{})
+	return &PGXTx{Tx: tx, ctx: ctx, committed: false, rolledBack: false}, err
+}
+
+func (s *PGXStorage) GetPool() IPGXPool {
+	return s.pool
+}
+
+func (s *PGXStorage) Close() {
+	s.pool.Close()
+}
+
+func createPool(ctx context.Context, config config.DB) (*pgxpool.Pool, error) {
 	pgxConfig, err := pgxpool.ParseConfig(config.DSN)
 	if err != nil {
-		return nil, fmt.Errorf("pgxpool parsse config failed: %w", err)
+		return nil, fmt.Errorf("pgxpool parse config failed: %w", err)
 	}
 
-	pgxConfig.ConnConfig.Tracer = &dbQueryTracer{} // TODO: debug only
-	// use with pgbouncer: pgxConfig.ConnConfig.DefaultQueryExecMode = pgx.QueryExecModeExec
+	pgxConfig.ConnConfig.Tracer = tracer.NewDBQueryTracer()
 
 	pool, err := pgxpool.NewWithConfig(ctx, pgxConfig)
 	if err != nil {
@@ -39,56 +72,33 @@ func NewPGXStorage(config config.DB) (*PGXStorage, error) {
 		return nil, fmt.Errorf("db connect failed: %w", err)
 	}
 
-	return &PGXStorage{pool: pool}, nil
-}
-
-func (s *PGXStorage) StartTx(ctx context.Context) (*PGXTx, error) {
-	tx, err := s.pool.BeginTx(ctx, pgx.TxOptions{})
-	return &PGXTx{Tx: tx, ctx: ctx, committed: false, rolledBack: false}, err
-}
-
-type PGXTx struct {
-	Tx         pgx.Tx
-	ctx        context.Context
-	committed  bool
-	rolledBack bool
-}
-
-func (t *PGXTx) Rollback() error {
-	if t.rolledBack || t.committed {
-		return nil
-	}
-
-	err := t.Tx.Rollback(t.ctx)
-	if err == nil {
-		t.rolledBack = true
-	}
-
-	return err
-}
-
-func (t *PGXTx) Commit() error {
-	if t.rolledBack || t.committed {
-		return nil
-	}
-
-	err := t.Tx.Commit(t.ctx)
-	if err == nil {
-		t.committed = true
-	}
-
-	return err
+	return pool, nil
 }
 
 func runMigrations(config config.DB) error {
-	migrator := NewDatabaseMigrator(config.DSN, "file://internal/storage/migrations", 3)
-	if err := migrator.Run(); err != nil {
-		return err
+	migrator, err := migrate.New(config.MigrationsSource, config.DSN)
+	if err != nil {
+		return fmt.Errorf("migrate.New() failed: %w", err)
 	}
 
-	return nil
-}
+	err = migrator.Up()
+	if err != nil {
+		if errors.Is(err, migrate.ErrNoChange) {
+			logging.LogInfo("migrations: no change")
+			return nil
+		}
+		return fmt.Errorf("migrations failed: %w", err)
+	}
 
-func (s *PGXStorage) Close() {
-	s.pool.Close()
+	defer func() {
+		srcErr, dbErr := migrator.Close()
+		if srcErr != nil {
+			logging.LogError(srcErr, "failed closing migrator", srcErr.Error())
+		}
+		if dbErr != nil {
+			logging.LogError(dbErr, "failed closing migrator", dbErr.Error())
+		}
+	}()
+
+	return nil
 }

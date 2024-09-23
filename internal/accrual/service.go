@@ -7,16 +7,20 @@ import (
 	"time"
 
 	"github.com/ex0rcist/gophermart/internal/config"
+	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/logging"
 	"github.com/ex0rcist/gophermart/internal/storage"
+	"github.com/ex0rcist/gophermart/internal/storage/repository"
 	"github.com/ex0rcist/gophermart/internal/utils"
 )
 
 type Service struct {
 	ctx context.Context
 
-	client  *Client
-	storage *storage.PGXStorage
+	client    *Client
+	storage   *storage.PGXStorage
+	userRepo  domain.IUserRepository
+	orderRepo domain.IOrderRepository
 
 	taskCh chan Task
 
@@ -26,11 +30,16 @@ type Service struct {
 
 func NewService(ctx context.Context, config *config.Accrual, storage *storage.PGXStorage) *Service {
 	return &Service{
-		ctx:            ctx,
-		client:         NewClient(config.Address, utils.IntToDuration(config.Timeout)),
-		storage:        storage,
+		ctx: ctx,
+
+		client:    NewClient(config.Address, utils.IntToDuration(config.Timeout)),
+		storage:   storage,
+		userRepo:  repository.NewUserRepository(storage.GetPool()),
+		orderRepo: repository.NewOrderRepository(storage.GetPool()),
+
+		taskCh: make(chan Task),
+
 		refillInterval: config.RefillInterval,
-		taskCh:         make(chan Task),
 	}
 }
 
@@ -93,7 +102,7 @@ func (s *Service) refillChannel() error {
 		return nil
 	}
 
-	orders, err := s.storage.OrderListForUpdate(s.ctx)
+	orders, err := s.orderRepo.OrderListForUpdate(s.ctx)
 	if err != nil {
 		return err
 	}

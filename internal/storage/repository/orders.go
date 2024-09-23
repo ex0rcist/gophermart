@@ -1,50 +1,52 @@
-package storage
+package repository
 
 import (
 	"context"
 	"errors"
 	"fmt"
 
+	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/entities"
-	"github.com/ex0rcist/gophermart/internal/models"
+	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/jackc/pgx/v5"
-	"github.com/shopspring/decimal"
 )
 
-type OrderCreateDTO struct {
-	UserID models.UserID
-	Number string
-	Status models.OrderStatus
+type orderRepository struct {
+	pool storage.IPGXPool
 }
 
-func (s *PGXStorage) OrderCreate(ctx context.Context, d OrderCreateDTO) (*models.Order, error) {
+func NewOrderRepository(pool storage.IPGXPool) domain.IOrderRepository {
+	return &orderRepository{pool: pool}
+}
+
+func (repo *orderRepository) OrderCreate(ctx context.Context, order domain.Order) (*domain.Order, error) {
 	stmt := `INSERT INTO orders (user_id, number, status) VALUES ($1, $2, $3) RETURNING id, user_id, number, status, accrual, created_at, updated_at`
 
-	rows, err := s.pool.Query(ctx, stmt, d.UserID, d.Number, d.Status)
+	rows, err := repo.pool.Query(ctx, stmt, order.UserID, order.Number, order.Status)
 	if err != nil {
 		return nil, fmt.Errorf("PGXStorage -> OrderCreate() error: %w", err)
 	}
 	defer rows.Close()
 
-	order := new(models.Order)
+	newOrder := new(domain.Order)
 	for rows.Next() {
 		err = rows.Scan(
-			&order.ID, &order.UserID, &order.Number, &order.Status,
-			&order.Accrual, &order.CreatedAt, &order.UpdatedAt,
+			&newOrder.ID, &newOrder.UserID, &newOrder.Number, &newOrder.Status,
+			&newOrder.Accrual, &newOrder.CreatedAt, &newOrder.UpdatedAt,
 		)
 		if err != nil {
 			return nil, fmt.Errorf("PGXStorage -> OrderCreate() error: %w", err)
 		}
 	}
 
-	return order, nil
+	return newOrder, nil
 }
 
-func (s *PGXStorage) OrderList(ctx context.Context, userID models.UserID) ([]*models.Order, error) {
+func (repo *orderRepository) OrderList(ctx context.Context, userID domain.UserID) ([]*domain.Order, error) {
 	stmt := `SELECT number, status, accrual, created_at FROM orders WHERE user_id = $1 ORDER BY created_at DESC`
-	orders := make([]*models.Order, 0)
+	orders := make([]*domain.Order, 0)
 
-	rows, err := s.pool.Query(ctx, stmt, userID)
+	rows, err := repo.pool.Query(ctx, stmt, userID)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, entities.ErrRecordNotFound
@@ -55,7 +57,7 @@ func (s *PGXStorage) OrderList(ctx context.Context, userID models.UserID) ([]*mo
 	defer rows.Close()
 
 	for rows.Next() {
-		order := &models.Order{}
+		order := &domain.Order{}
 		if err = rows.Scan(&order.Number, &order.Status, &order.Accrual, &order.CreatedAt); err != nil {
 			return nil, fmt.Errorf("PGXStorage -> OrderList() error: %w", err)
 		}
@@ -65,11 +67,11 @@ func (s *PGXStorage) OrderList(ctx context.Context, userID models.UserID) ([]*mo
 	return orders, nil
 }
 
-func (s *PGXStorage) OrderFindByNumber(ctx context.Context, number string) (*models.Order, error) {
+func (repo *orderRepository) OrderFindByNumber(ctx context.Context, number string) (*domain.Order, error) {
 	stmt := `SELECT id, user_id, number, status, accrual, created_at, updated_at FROM orders WHERE number = $1`
-	order := new(models.Order)
+	order := new(domain.Order)
 
-	err := s.pool.QueryRow(ctx, stmt, number).Scan(
+	err := repo.pool.QueryRow(ctx, stmt, number).Scan(
 		&order.ID, &order.UserID, &order.Number, &order.Status,
 		&order.Accrual, &order.CreatedAt, &order.UpdatedAt,
 	)
@@ -83,11 +85,11 @@ func (s *PGXStorage) OrderFindByNumber(ctx context.Context, number string) (*mod
 	return order, nil
 }
 
-func (s *PGXStorage) OrderListForUpdate(ctx context.Context) ([]*models.Order, error) {
+func (repo *orderRepository) OrderListForUpdate(ctx context.Context) ([]*domain.Order, error) {
 	stmt := `SELECT id, user_id, number, status, created_at FROM orders WHERE status IN ('NEW', 'PROCESSING');`
-	orders := make([]*models.Order, 0)
+	orders := make([]*domain.Order, 0)
 
-	rows, err := s.pool.Query(ctx, stmt)
+	rows, err := repo.pool.Query(ctx, stmt)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, entities.ErrRecordNotFound
@@ -96,7 +98,7 @@ func (s *PGXStorage) OrderListForUpdate(ctx context.Context) ([]*models.Order, e
 	}
 
 	for rows.Next() {
-		order := &models.Order{}
+		order := &domain.Order{}
 		if err = rows.Scan(&order.ID, &order.UserID, &order.Number, &order.Status, &order.CreatedAt); err != nil {
 			return nil, fmt.Errorf("PGXStorage -> OrderListForUpdate() error: %w", err)
 		}
@@ -111,20 +113,14 @@ func (s *PGXStorage) OrderListForUpdate(ctx context.Context) ([]*models.Order, e
 	return orders, nil
 }
 
-type OrderUpdateDTO struct {
-	ID      models.OrderID
-	Status  models.OrderStatus
-	Accrual decimal.Decimal
-}
-
-func (s *PGXStorage) OrderUpdate(ctx context.Context, tx pgx.Tx, d OrderUpdateDTO) error {
+func (repo *orderRepository) OrderUpdate(ctx context.Context, tx pgx.Tx, order domain.Order) error {
 	stmt := `UPDATE orders SET status = $1, accrual = $2 WHERE id = $3`
 
 	var err error
 	if tx != nil {
-		_, err = tx.Exec(ctx, stmt, d.Status, d.Accrual, d.ID)
+		_, err = tx.Exec(ctx, stmt, order.Status, order.Accrual, order.ID)
 	} else {
-		_, err = s.pool.Exec(ctx, stmt, d.Status, d.Accrual, d.ID)
+		_, err = repo.pool.Exec(ctx, stmt, order.Status, order.Accrual, order.ID)
 	}
 
 	if err != nil {

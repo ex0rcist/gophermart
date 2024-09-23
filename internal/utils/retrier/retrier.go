@@ -1,6 +1,7 @@
-package utils
+package retrier
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/avast/retry-go"
@@ -11,6 +12,17 @@ type Retrier struct {
 	payloadFn retry.RetryableFunc
 	retryIfFn retry.RetryIfFunc
 	delays    []time.Duration
+}
+
+var _ error = (*RetriableError)(nil)
+
+type RetriableError struct {
+	Err        error
+	RetryAfter time.Duration
+}
+
+func (e RetriableError) Error() string {
+	return fmt.Sprintf("%s (retry after %v)", e.Err.Error(), e.RetryAfter)
 }
 
 func (r Retrier) Run() error {

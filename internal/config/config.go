@@ -16,7 +16,8 @@ import (
 )
 
 type DB struct {
-	DSN string `env:"DATABASE_URI"`
+	DSN              string `env:"DATABASE_URI"`
+	MigrationsSource string
 }
 
 type Server struct {
@@ -63,13 +64,15 @@ func Parse() (*Config, error) {
 
 func NewDefault(_ *Config) (*Config, error) {
 	config := &Config{
-		DB: DB{},
+		DB: DB{
+			MigrationsSource: "file://internal/storage/migrations",
+		},
 		Server: Server{
-			Address: "0.0.0.0:8282",
+			Address: "0.0.0.0:8080",
 			Timeout: 60,
 		},
 		Accrual: Accrual{
-			Address:        "0.0.0.0:8080",
+			Address:        "0.0.0.0:8181",
 			RefillInterval: 5 * time.Second,
 			Timeout:        60,
 		},

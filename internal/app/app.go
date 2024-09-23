@@ -25,9 +25,9 @@ type App struct {
 }
 
 func New(config *config.Config) (*App, error) {
-	pgxStorage, err := storage.NewPGXStorage(config.DB)
+	pgxStorage, err := storage.NewPGXStorage(config.DB, nil, true)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("NewPGXStorage() failed: %w", err)
 	}
 
 	ctx, _ := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)

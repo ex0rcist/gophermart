@@ -3,7 +3,6 @@ package entities
 import (
 	"errors"
 	"fmt"
-	"time"
 )
 
 var (
@@ -15,17 +14,6 @@ var (
 
 func NewStackError(err error) error {
 	return errors.New(err.Error())
-}
-
-var _ error = (*RetriableError)(nil)
-
-type RetriableError struct {
-	Err        error
-	RetryAfter time.Duration
-}
-
-func (e RetriableError) Error() string {
-	return fmt.Sprintf("%s (retry after %v)", e.Err.Error(), e.RetryAfter)
 }
 
 func WrapError(prefix string, err error) error {

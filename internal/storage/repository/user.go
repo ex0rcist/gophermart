@@ -1,31 +1,35 @@
-package storage
+package repository
 
 import (
 	"context"
 	"errors"
 	"fmt"
 
+	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/entities"
-	"github.com/ex0rcist/gophermart/internal/models"
+	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/jackc/pgx/v5"
 	"github.com/shopspring/decimal"
 )
 
-type CreateUserDTO struct {
-	Login    string
-	Password string
+type userRepository struct {
+	pool storage.IPGXPool
 }
 
-func (s *PGXStorage) UserCreate(ctx context.Context, d CreateUserDTO) (*models.User, error) {
+func NewUserRepository(pool storage.IPGXPool) domain.IUserRepository {
+	return &userRepository{pool: pool}
+}
+
+func (repo *userRepository) UserCreate(ctx context.Context, login string, password string) (*domain.User, error) {
 	stmt := `INSERT INTO users (login, password) VALUES ($1, $2) RETURNING id, login, balance, created_at, updated_at`
 
-	rows, err := s.pool.Query(ctx, stmt, d.Login, d.Password)
+	rows, err := repo.pool.Query(ctx, stmt, login, password)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	user := new(models.User)
+	user := new(domain.User)
 	for rows.Next() {
 		err = rows.Scan(&user.ID, &user.Login, &user.Balance, &user.CreatedAt, &user.UpdatedAt)
 		if err != nil {
@@ -40,11 +44,11 @@ func (s *PGXStorage) UserCreate(ctx context.Context, d CreateUserDTO) (*models.U
 	return user, nil
 }
 
-func (s *PGXStorage) UserFindByLogin(ctx context.Context, login string) (*models.User, error) {
+func (repo *userRepository) UserFindByLogin(ctx context.Context, login string) (*domain.User, error) {
 	stmt := `SELECT id, login, password, balance, created_at, updated_at FROM users WHERE login = $1`
-	user := new(models.User)
+	user := new(domain.User)
 
-	err := s.pool.QueryRow(ctx, stmt, login).Scan(
+	err := repo.pool.QueryRow(ctx, stmt, login).Scan(
 		&user.ID, &user.Login, &user.Password,
 		&user.Balance, &user.CreatedAt, &user.UpdatedAt,
 	)
@@ -59,35 +63,30 @@ func (s *PGXStorage) UserFindByLogin(ctx context.Context, login string) (*models
 	return user, nil
 }
 
-type UserGetBalanceDTO struct {
-	Balance   decimal.Decimal
-	Withdrawn decimal.Decimal
-}
-
-func (s *PGXStorage) UserGetBalance(ctx context.Context, tx pgx.Tx, id models.UserID) (*UserGetBalanceDTO, error) {
+func (repo *userRepository) UserGetBalance(ctx context.Context, tx pgx.Tx, id domain.UserID) (*decimal.Decimal, *decimal.Decimal, error) {
 	stmt := `SELECT balance, withdrawn FROM users WHERE id = $1 FOR UPDATE`
-	result := new(UserGetBalanceDTO)
 
 	var row pgx.Row
 	if tx != nil {
 		row = tx.QueryRow(ctx, stmt, id)
 	} else {
-		row = s.pool.QueryRow(ctx, stmt, id)
+		row = repo.pool.QueryRow(ctx, stmt, id)
 	}
 
-	err := row.Scan(&result.Balance, &result.Withdrawn)
+	var b, w decimal.Decimal
+	err := row.Scan(&b, &w)
 
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, entities.ErrRecordNotFound
+			return nil, nil, entities.ErrRecordNotFound
 		}
-		return nil, fmt.Errorf("PGXStorage -> UserGetBalance() error: %w", err)
+		return nil, nil, fmt.Errorf("PGXStorage -> UserGetBalance() error: %w", err)
 	}
 
-	return result, nil
+	return &b, &w, nil
 }
 
-func (s *PGXStorage) UserUpdateBalanceAndWithdrawals(ctx context.Context, tx pgx.Tx, id models.UserID) error {
+func (repo *userRepository) UserUpdateBalanceAndWithdrawals(ctx context.Context, tx pgx.Tx, id domain.UserID) error {
 	stmt := `
 	WITH
     	accruals AS (        
@@ -114,7 +113,7 @@ func (s *PGXStorage) UserUpdateBalanceAndWithdrawals(ctx context.Context, tx pgx
 	if tx != nil {
 		_, err = tx.Exec(ctx, stmt, id)
 	} else {
-		_, err = s.pool.Exec(ctx, stmt, id)
+		_, err = repo.pool.Exec(ctx, stmt, id)
 	}
 
 	if err != nil {

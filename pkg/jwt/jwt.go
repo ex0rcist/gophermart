@@ -9,17 +9,16 @@ import (
 )
 
 var ErrInvalidToken = errors.New("invalid JWT token")
-var tokenLifetime = time.Minute * 5000
 
 type GMClaims struct {
 	jwt.RegisteredClaims
 	Login string
 }
 
-func CreateJWT(key entities.Secret, login string) (string, error) {
+func CreateJWT(key entities.Secret, login string, duration time.Duration) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, GMClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(tokenLifetime)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(duration)),
 		},
 		Login: login,
 	})
