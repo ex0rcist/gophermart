@@ -64,7 +64,7 @@ func (b *HTTPBackend) setupRoutes() {
 
 	publicRouter := b.router.Group("")
 
-	privateRouter := b.router.Group("/api/user")
+	privateRouter := b.router.Group("")
 	privateRouter.Use(middleware.Auth(
 		repository.NewUserRepository(b.storage.GetPool()),
 		b.config.Secret,
