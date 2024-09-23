@@ -81,10 +81,10 @@ func (b *HTTPBackend) setupUserController(publicRouter *gin.RouterGroup, private
 	wdrwRepo := repository.NewWithdrawalRepository(b.storage.GetPool())
 
 	ctrl := &controller.UserController{
-		LoginUsecase:           usecase.NewLoginUsecase(userRepo, b.config.Secret, defaultTimeout),
-		RegisterUsecase:        usecase.NewRegisterUsecase(userRepo, b.config.Secret, defaultTimeout),
-		GetUserBalanceUsecase:  usecase.NewGetUserBalanceUsecase(userRepo, defaultTimeout),
-		WithdrawBalanceUsecase: usecase.NewWithdrawBalanceUsecase(userRepo, wdrwRepo, defaultTimeout),
+		LoginUsecase:           usecase.NewLoginUsecase(b.storage, userRepo, b.config.Secret, defaultTimeout),
+		RegisterUsecase:        usecase.NewRegisterUsecase(b.storage, userRepo, b.config.Secret, defaultTimeout),
+		GetUserBalanceUsecase:  usecase.NewGetUserBalanceUsecase(b.storage, userRepo, defaultTimeout),
+		WithdrawBalanceUsecase: usecase.NewWithdrawBalanceUsecase(b.storage, userRepo, wdrwRepo, defaultTimeout),
 	}
 
 	publicRouter.POST("/api/user/register", ctrl.Register)
@@ -98,8 +98,8 @@ func (b *HTTPBackend) setupOrderController(_ *gin.RouterGroup, privateRouter *gi
 	repo := repository.NewOrderRepository(b.storage.GetPool())
 
 	ctrl := &controller.OrderController{
-		OrderCreateUsecase: usecase.NewOrderCreateUsecase(repo, defaultTimeout),
-		OrderListUsecase:   usecase.NewOrderListUsecase(repo, defaultTimeout),
+		OrderCreateUsecase: usecase.NewOrderCreateUsecase(b.storage, repo, defaultTimeout),
+		OrderListUsecase:   usecase.NewOrderListUsecase(b.storage, repo, defaultTimeout),
 	}
 
 	privateRouter.POST("/api/user/orders", ctrl.CreateOrder)
@@ -110,7 +110,7 @@ func (b *HTTPBackend) setupWithdrawalController(_ *gin.RouterGroup, privateRoute
 	repo := repository.NewWithdrawalRepository(b.storage.GetPool())
 
 	ctrl := &controller.WithdrawalController{
-		WithdrawalListUsecase: usecase.NewWithdrawalListUsecase(repo, defaultTimeout),
+		WithdrawalListUsecase: usecase.NewWithdrawalListUsecase(b.storage, repo, defaultTimeout),
 	}
 
 	privateRouter.GET("/api/user/withdrawals", ctrl.WithdrawalList)

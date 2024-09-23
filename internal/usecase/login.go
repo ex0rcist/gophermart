@@ -6,18 +6,20 @@ import (
 
 	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/entities"
+	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/ex0rcist/gophermart/internal/utils"
 	"github.com/ex0rcist/gophermart/pkg/jwt"
 )
 
 type loginUsecase struct {
+	storage        storage.IPGXStorage
 	repo           domain.IUserRepository
 	secret         entities.Secret
 	contextTimeout time.Duration
 }
 
-func NewLoginUsecase(repo domain.IUserRepository, secret entities.Secret, timeout time.Duration) domain.ILoginUsecase {
-	return &loginUsecase{repo: repo, contextTimeout: timeout, secret: secret}
+func NewLoginUsecase(storage storage.IPGXStorage, repo domain.IUserRepository, secret entities.Secret, timeout time.Duration) domain.ILoginUsecase {
+	return &loginUsecase{storage: storage, repo: repo, secret: secret, contextTimeout: timeout}
 }
 
 func (uc *loginUsecase) Call(ctx context.Context, form domain.LoginRequest) (string, error) {

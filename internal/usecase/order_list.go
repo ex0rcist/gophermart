@@ -6,15 +6,17 @@ import (
 
 	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/entities"
+	"github.com/ex0rcist/gophermart/internal/storage"
 )
 
 type orderListUsecase struct {
+	storage        storage.IPGXStorage
 	repo           domain.IOrderRepository
 	contextTimeout time.Duration
 }
 
-func NewOrderListUsecase(repo domain.IOrderRepository, timeout time.Duration) domain.IOrderListUsecase {
-	return &orderListUsecase{repo: repo, contextTimeout: timeout}
+func NewOrderListUsecase(storage storage.IPGXStorage, repo domain.IOrderRepository, timeout time.Duration) domain.IOrderListUsecase {
+	return &orderListUsecase{storage: storage, repo: repo, contextTimeout: timeout}
 }
 
 func (uc *orderListUsecase) Call(ctx context.Context, user *domain.User) ([]*domain.OrderListResult, error) {

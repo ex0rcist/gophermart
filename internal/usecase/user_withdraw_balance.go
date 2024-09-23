@@ -16,8 +16,8 @@ type withdrawBalanceUsecase struct {
 	contextTimeout time.Duration
 }
 
-func NewWithdrawBalanceUsecase(userRepo domain.IUserRepository, wdrwRepo domain.IWithdrawalRepository, timeout time.Duration) domain.IWithdrawBalanceUsecase {
-	return &withdrawBalanceUsecase{userRepo: userRepo, wdrwRepo: wdrwRepo, contextTimeout: timeout}
+func NewWithdrawBalanceUsecase(storage storage.IPGXStorage, userRepo domain.IUserRepository, wdrwRepo domain.IWithdrawalRepository, timeout time.Duration) domain.IWithdrawBalanceUsecase {
+	return &withdrawBalanceUsecase{storage: storage, userRepo: userRepo, wdrwRepo: wdrwRepo, contextTimeout: timeout}
 }
 
 func (uc *withdrawBalanceUsecase) Call(ctx context.Context, user *domain.User, form domain.WithdrawBalanceRequest) error {

@@ -6,15 +6,17 @@ import (
 
 	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/entities"
+	"github.com/ex0rcist/gophermart/internal/storage"
 )
 
 type getUserBalanceUsecase struct {
+	storage        storage.IPGXStorage
 	repo           domain.IUserRepository
 	contextTimeout time.Duration
 }
 
-func NewGetUserBalanceUsecase(repo domain.IUserRepository, timeout time.Duration) domain.IGetUserBalanceUsecase {
-	return &getUserBalanceUsecase{repo: repo, contextTimeout: timeout}
+func NewGetUserBalanceUsecase(storage storage.IPGXStorage, repo domain.IUserRepository, timeout time.Duration) domain.IGetUserBalanceUsecase {
+	return &getUserBalanceUsecase{storage: storage, repo: repo, contextTimeout: timeout}
 }
 
 func (uc *getUserBalanceUsecase) Fetch(ctx context.Context, id domain.UserID) (*domain.GetUserBalanceResult, error) {

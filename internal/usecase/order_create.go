@@ -6,16 +6,18 @@ import (
 
 	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/entities"
+	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/ex0rcist/gophermart/internal/utils"
 )
 
 type orderCreateUsecase struct {
+	storage        storage.IPGXStorage
 	repo           domain.IOrderRepository
 	contextTimeout time.Duration
 }
 
-func NewOrderCreateUsecase(repo domain.IOrderRepository, timeout time.Duration) domain.IOrderCreateUsecase {
-	return &orderCreateUsecase{repo: repo, contextTimeout: timeout}
+func NewOrderCreateUsecase(storage storage.IPGXStorage, repo domain.IOrderRepository, timeout time.Duration) domain.IOrderCreateUsecase {
+	return &orderCreateUsecase{storage: storage, repo: repo, contextTimeout: timeout}
 }
 
 func (uc *orderCreateUsecase) Create(ctx context.Context, user *domain.User, number string) (*domain.Order, error) {

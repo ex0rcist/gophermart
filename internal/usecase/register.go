@@ -6,18 +6,20 @@ import (
 
 	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/entities"
+	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/ex0rcist/gophermart/internal/utils"
 	"github.com/ex0rcist/gophermart/pkg/jwt"
 )
 
 type registerUsecase struct {
+	storage        storage.IPGXStorage
 	repo           domain.IUserRepository
-	contextTimeout time.Duration
 	secret         entities.Secret
+	contextTimeout time.Duration
 }
 
-func NewRegisterUsecase(repo domain.IUserRepository, secret entities.Secret, timeout time.Duration) domain.IRegisterUsecase {
-	return &registerUsecase{repo: repo, contextTimeout: timeout, secret: secret}
+func NewRegisterUsecase(storage storage.IPGXStorage, repo domain.IUserRepository, secret entities.Secret, timeout time.Duration) domain.IRegisterUsecase {
+	return &registerUsecase{storage: storage, repo: repo, secret: secret, contextTimeout: timeout}
 }
 
 func (uc *registerUsecase) Call(ctx context.Context, form domain.RegisterRequest) (string, error) {

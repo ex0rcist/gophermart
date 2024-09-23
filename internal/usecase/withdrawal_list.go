@@ -6,15 +6,17 @@ import (
 
 	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/entities"
+	"github.com/ex0rcist/gophermart/internal/storage"
 )
 
 type withdrawalListUsecase struct {
+	storage        storage.IPGXStorage
 	repo           domain.IWithdrawalRepository
 	contextTimeout time.Duration
 }
 
-func NewWithdrawalListUsecase(repo domain.IWithdrawalRepository, timeout time.Duration) domain.IWithdrawalListUsecase {
-	return &withdrawalListUsecase{repo: repo, contextTimeout: timeout}
+func NewWithdrawalListUsecase(storage storage.IPGXStorage, repo domain.IWithdrawalRepository, timeout time.Duration) domain.IWithdrawalListUsecase {
+	return &withdrawalListUsecase{storage: storage, repo: repo, contextTimeout: timeout}
 }
 
 func (uc *withdrawalListUsecase) Call(ctx context.Context, u *domain.User) ([]*domain.WithdrawalListResult, error) {
