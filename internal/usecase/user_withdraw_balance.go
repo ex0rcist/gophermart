@@ -58,7 +58,7 @@ func (uc *withdrawBalanceUsecase) Call(ctx context.Context, user *domain.User, f
 	}
 	defer func() {
 		err := tx.Rollback(ctx)
-		if err != nil && !errors.Is(pgx.ErrTxClosed, err) {
+		if err != nil && !errors.Is(err, pgx.ErrTxClosed) {
 			logging.LogErrorCtx(ctx, err, "withdrawBalanceUsecase(): error rolling tx back")
 		}
 	}()

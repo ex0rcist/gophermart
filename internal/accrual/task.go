@@ -85,7 +85,7 @@ func (t Task) updateOrder(ctx context.Context, status domain.OrderStatus, amount
 	}
 	defer func() {
 		err := tx.Rollback(ctx)
-		if err != nil && !errors.Is(pgx.ErrTxClosed, err) {
+		if err != nil && !errors.Is(err, pgx.ErrTxClosed) {
 			logging.LogErrorCtx(ctx, err, "Task: updateOrder(): error rolling tx back")
 		}
 	}()
