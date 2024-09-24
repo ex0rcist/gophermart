@@ -15,6 +15,7 @@ require (
 	github.com/shopspring/decimal v1.2.0
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.9.0
+	go.uber.org/mock v0.4.0
 	golang.org/x/crypto v0.23.0
 	golang.org/x/sync v0.7.0
 )
@@ -51,7 +52,6 @@ require (
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
-	github.com/vektra/mockery v1.1.2 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/arch v0.8.0 // indirect
 	golang.org/x/net v0.25.0 // indirect

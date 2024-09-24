@@ -11,11 +11,18 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+type IUserRepository interface {
+	UserCreate(ctx context.Context, login string, password string) (*domain.User, error)
+	UserFindByLogin(ctx context.Context, login string) (*domain.User, error)
+	UserGetBalance(ctx context.Context, tx pgx.Tx, id domain.UserID) (*decimal.Decimal, *decimal.Decimal, error)
+	UserUpdateBalanceAndWithdrawals(ctx context.Context, tx pgx.Tx, id domain.UserID) error
+}
+
 type userRepository struct {
 	pool storage.IPGXPool
 }
 
-func NewUserRepository(pool storage.IPGXPool) domain.IUserRepository {
+func NewUserRepository(pool storage.IPGXPool) IUserRepository {
 	return &userRepository{pool: pool}
 }
 

@@ -3,13 +3,13 @@ package controller
 import (
 	"net/http"
 
-	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/storage"
+	"github.com/ex0rcist/gophermart/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
 
 type WithdrawalController struct {
-	WithdrawalListUsecase domain.IWithdrawalListUsecase
+	WithdrawalListUsecase usecase.IWithdrawalListUsecase
 }
 
 func (ctrl *WithdrawalController) WithdrawalList(c *gin.Context) {

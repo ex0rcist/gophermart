@@ -10,11 +10,16 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+type IWithdrawalRepository interface {
+	WithdrawalCreate(ctx context.Context, tx pgx.Tx, w domain.Withdrawal) error
+	WithdrawalList(ctx context.Context, userID domain.UserID) ([]*domain.Withdrawal, error)
+}
+
 type withdrawalRepository struct {
 	pool storage.IPGXPool
 }
 
-func NewWithdrawalRepository(pool storage.IPGXPool) domain.IWithdrawalRepository {
+func NewWithdrawalRepository(pool storage.IPGXPool) IWithdrawalRepository {
 	return &withdrawalRepository{pool: pool}
 }
 

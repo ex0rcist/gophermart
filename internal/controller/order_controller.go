@@ -4,14 +4,14 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/storage"
+	"github.com/ex0rcist/gophermart/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
 
 type OrderController struct {
-	OrderCreateUsecase domain.IOrderCreateUsecase
-	OrderListUsecase   domain.IOrderListUsecase
+	OrderCreateUsecase usecase.IOrderCreateUsecase
+	OrderListUsecase   usecase.IOrderListUsecase
 }
 
 func (ctrl *OrderController) CreateOrder(c *gin.Context) {
@@ -29,13 +29,13 @@ func (ctrl *OrderController) CreateOrder(c *gin.Context) {
 	_, err = ctrl.OrderCreateUsecase.Create(ctx, currentUser, number)
 	if err != nil {
 		switch {
-		case err == domain.ErrInvalidOrderNumber:
+		case err == usecase.ErrInvalidOrderNumber:
 			c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 			return
-		case err == domain.ErrOrderAlreadyRegistered:
+		case err == usecase.ErrOrderAlreadyRegistered:
 			c.Status(http.StatusOK)
 			return
-		case err == domain.ErrOrderConflict:
+		case err == usecase.ErrOrderConflict:
 			c.Status(http.StatusConflict)
 			return
 		default:

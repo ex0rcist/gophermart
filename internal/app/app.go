@@ -19,21 +19,35 @@ import (
 type App struct {
 	ctx         context.Context
 	config      *config.Config
-	storage     *storage.PGXStorage
-	httpBackend *httpbackend.HTTPBackend
-	accrService *accrual.Service
+	storage     storage.IPGXStorage
+	httpBackend httpbackend.IHTTPBackend
+	accrService accrual.IService
+	cancelFunc  context.CancelFunc
 }
 
-func New(config *config.Config) (*App, error) {
-	pgxStorage, err := storage.NewPGXStorage(config.DB, nil, true)
-	if err != nil {
-		return nil, fmt.Errorf("NewPGXStorage() failed: %w", err)
+func New(
+	config *config.Config,
+	pgxStorage storage.IPGXStorage,
+	accrService accrual.IService,
+	httpBackend httpbackend.IHTTPBackend,
+) (*App, error) {
+	var err error
+	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+
+	if pgxStorage == nil {
+		pgxStorage, err = storage.NewPGXStorage(config.DB, nil, true)
+		if err != nil {
+			return nil, fmt.Errorf("NewPGXStorage() failed: %w", err)
+		}
 	}
 
-	ctx, _ := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	if accrService == nil {
+		accrService = accrual.NewService(ctx, &config.Accrual, nil, pgxStorage, nil, nil)
+	}
 
-	accrService := accrual.NewService(ctx, &config.Accrual, pgxStorage)
-	httpBackend := httpbackend.NewHTTPBackend(ctx, &config.Server, pgxStorage)
+	if httpBackend == nil {
+		httpBackend = httpbackend.NewHTTPBackend(ctx, &config.Server, pgxStorage)
+	}
 
 	return &App{
 		ctx:         ctx,
@@ -41,8 +55,8 @@ func New(config *config.Config) (*App, error) {
 		storage:     pgxStorage,
 		httpBackend: httpBackend,
 		accrService: accrService,
+		cancelFunc:  cancel,
 	}, nil
-
 }
 
 func (a *App) Run() error {
@@ -54,20 +68,25 @@ func (a *App) Run() error {
 		err := a.httpBackend.Run()
 		if err != nil && err != http.ErrServerClosed {
 			logging.LogError(err, "httpServer error")
+			a.cancelFunc()
 		}
 	}()
 
 	// стартуем интеграцию с accrual
 	// NB: остановка a.accrService не требуется, т.к. он слушает a.ctx
 	go func() {
-		a.accrService.Run()
+		err := a.accrService.Run()
+		if err != nil {
+			logging.LogError(err, "accrualService error")
+			a.cancelFunc()
+		}
 	}()
 
 	<-a.ctx.Done() // ждем сигнал от NotifyContext
 
 	// останавливаем сервер
 	logging.LogInfo("stopping server... ")
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 	if err := a.httpBackend.Shutdown(ctx); err != nil {
 		logging.LogError(err, "err stopping server")

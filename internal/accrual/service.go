@@ -2,26 +2,31 @@ package accrual
 
 import (
 	"context"
-	"fmt"
 	"runtime"
 	"time"
 
 	"github.com/ex0rcist/gophermart/internal/config"
-	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/logging"
 	"github.com/ex0rcist/gophermart/internal/storage"
 	"github.com/ex0rcist/gophermart/internal/storage/repository"
 )
 
+type IService interface {
+	Push(t ITask)
+	Run() error
+	SetLockedUntil(lockedUntil time.Time)
+	GetLockedUntil() time.Time
+}
+
 type Service struct {
 	ctx context.Context
 
-	client    *Client
-	storage   *storage.PGXStorage
-	userRepo  domain.IUserRepository
-	orderRepo domain.IOrderRepository
+	client    IClient
+	storage   storage.IPGXStorage
+	userRepo  repository.IUserRepository
+	orderRepo repository.IOrderRepository
 
-	taskCh chan Task
+	taskCh chan ITask
 
 	contextTimeout time.Duration
 	refillInterval time.Duration
@@ -29,29 +34,49 @@ type Service struct {
 	lockedUntil time.Time
 }
 
-func NewService(ctx context.Context, config *config.Accrual, storage *storage.PGXStorage) *Service {
+func NewService(
+	ctx context.Context,
+	config *config.Accrual,
+	client IClient,
+	storage storage.IPGXStorage,
+	userRepo repository.IUserRepository,
+	orderRepo repository.IOrderRepository,
+) *Service {
+	if client == nil {
+		client = NewClient(config.Address, config.Timeout)
+	}
+
+	if userRepo == nil {
+		userRepo = repository.NewUserRepository(storage.GetPool())
+	}
+
+	if orderRepo == nil {
+		orderRepo = repository.NewOrderRepository(storage.GetPool())
+	}
+
 	return &Service{
 		ctx: ctx,
 
-		client:    NewClient(config.Address, config.Timeout),
+		client:    client,
 		storage:   storage,
-		userRepo:  repository.NewUserRepository(storage.GetPool()),
-		orderRepo: repository.NewOrderRepository(storage.GetPool()),
+		userRepo:  userRepo,
+		orderRepo: orderRepo,
 
-		taskCh: make(chan Task),
+		taskCh: make(chan ITask),
 
 		contextTimeout: config.Timeout,
 		refillInterval: config.RefillInterval,
 	}
 }
 
-func (s *Service) Run() {
+func (s *Service) Run() error {
 	logging.LogInfoF("starting accrual service, spawning %d workers", runtime.NumCPU())
 	s.spawnWorkers()
 
 	err := s.refillChannel()
 	if err != nil {
 		logging.LogError(err, "error refilling accrual channel")
+		return err
 	}
 
 	go func() {
@@ -68,11 +93,11 @@ func (s *Service) Run() {
 			}
 		}
 	}()
+
+	return nil
 }
 
-func (s *Service) Push(t Task) {
-	logging.LogDebugCtx(s.ctx, fmt.Sprintf("accrual service: pushing task with %s", t.order))
-
+func (s *Service) Push(t ITask) {
 	s.taskCh <- t
 }
 
@@ -84,10 +109,14 @@ func (s *Service) SetLockedUntil(lockedUntil time.Time) {
 	s.lockedUntil = lockedUntil
 }
 
+func (s *Service) GetLockedUntil() time.Time {
+	return s.lockedUntil
+}
+
 func (s *Service) spawnWorkers() {
 	for i := 0; i < runtime.NumCPU(); i++ {
 		worker := NewWorker(s)
-		go worker.work()
+		go worker.Work(s.ctx, s.taskCh)
 	}
 }
 

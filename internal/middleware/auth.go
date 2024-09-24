@@ -1,10 +1,10 @@
 package middleware
 
 import (
-	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/entities"
 	"github.com/ex0rcist/gophermart/internal/logging"
 	"github.com/ex0rcist/gophermart/internal/storage"
+	"github.com/ex0rcist/gophermart/internal/storage/repository"
 	"github.com/ex0rcist/gophermart/pkg/jwt"
 	"github.com/gin-gonic/gin"
 
@@ -15,7 +15,7 @@ import (
 const UserContextKey = "currentUser"
 
 func Auth(
-	repo domain.IUserRepository,
+	repo repository.IUserRepository,
 	key entities.Secret,
 ) gin.HandlerFunc {
 	return func(c *gin.Context) {

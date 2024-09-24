@@ -25,6 +25,10 @@ const (
 	StatusProcessed  AccrualStatus = "PROCESSED"
 )
 
+type IClient interface {
+	GetBonuses(ctx context.Context, orderNumber string) (*Response, *ClientError)
+}
+
 // клиент для работы с системой начисления бонусов
 type Client struct {
 	address string

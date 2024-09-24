@@ -3,11 +3,9 @@ package storage
 import (
 	"context"
 
-	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -183,74 +181,4 @@ func (m *PGXTxMock) QueryRow(ctx context.Context, sql string, args ...any) pgx.R
 func (m *PGXTxMock) Conn() *pgx.Conn {
 	mArgs := m.Called()
 	return mArgs.Get(0).(*pgx.Conn)
-}
-
-// ************** PGXStorage ************** //
-
-type MockPGXStorage struct {
-	mock.Mock
-}
-
-func (m *MockPGXStorage) Close() {
-	_ = m.Called()
-}
-
-func (m *MockPGXStorage) OrderCreate(ctx context.Context, order domain.Order) (*domain.Order, error) {
-	mArgs := m.Called(ctx, order)
-	return mArgs.Get(0).(*domain.Order), mArgs.Error(1)
-}
-
-func (m *MockPGXStorage) OrderFindByNumber(ctx context.Context, number string) (*domain.Order, error) {
-	mArgs := m.Called(ctx, number)
-	return mArgs.Get(0).(*domain.Order), mArgs.Error(1)
-}
-
-func (m *MockPGXStorage) OrderList(ctx context.Context, userID domain.UserID) ([]*domain.Order, error) {
-	mArgs := m.Called(ctx, userID)
-	return mArgs.Get(0).([]*domain.Order), mArgs.Error(1)
-}
-
-func (m *MockPGXStorage) OrderListForUpdate(ctx context.Context) ([]*domain.Order, error) {
-	mArgs := m.Called(ctx)
-	return mArgs.Get(0).([]*domain.Order), mArgs.Error(1)
-}
-
-func (m *MockPGXStorage) OrderUpdate(ctx context.Context, tx pgx.Tx, order domain.Order) error {
-	mArgs := m.Called(ctx, tx, order)
-	return mArgs.Error(0)
-}
-
-func (m *MockPGXStorage) StartTx(ctx context.Context) (*PGXTx, error) {
-	mArgs := m.Called(ctx)
-	return mArgs.Get(0).(*PGXTx), mArgs.Error(1)
-}
-
-func (m *MockPGXStorage) UserCreate(ctx context.Context, login string, password string) (*domain.User, error) {
-	mArgs := m.Called(ctx, login, password)
-	return mArgs.Get(0).(*domain.User), mArgs.Error(1)
-}
-
-func (m *MockPGXStorage) UserFindByLogin(ctx context.Context, login string) (*domain.User, error) {
-	mArgs := m.Called(ctx, login)
-	return mArgs.Get(0).(*domain.User), mArgs.Error(1)
-}
-
-func (m *MockPGXStorage) UserGetBalance(ctx context.Context, tx pgx.Tx, id domain.UserID) (*decimal.Decimal, *decimal.Decimal, error) {
-	mArgs := m.Called(ctx, tx, id)
-	return mArgs.Get(0).(*decimal.Decimal), mArgs.Get(1).(*decimal.Decimal), mArgs.Error(2)
-}
-
-func (m *MockPGXStorage) UserUpdateBalanceAndWithdrawals(ctx context.Context, tx pgx.Tx, id domain.UserID) error {
-	mArgs := m.Called(ctx, tx, id)
-	return mArgs.Error(0)
-}
-
-func (m *MockPGXStorage) WithdrawalCreate(ctx context.Context, tx pgx.Tx, w domain.Withdrawal) error {
-	mArgs := m.Called(ctx, tx, w)
-	return mArgs.Error(0)
-}
-
-func (m *MockPGXStorage) WithdrawalList(ctx context.Context, userID domain.UserID) ([]*domain.Withdrawal, error) {
-	mArgs := m.Called(ctx, userID)
-	return mArgs.Get(0).([]*domain.Withdrawal), mArgs.Error(1)
 }

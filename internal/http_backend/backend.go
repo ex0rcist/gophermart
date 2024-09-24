@@ -14,6 +14,11 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+type IHTTPBackend interface {
+	Run() error
+	Shutdown(ctx context.Context) error
+}
+
 type HTTPBackend struct {
 	config     *config.Server
 	httpServer *http.Server

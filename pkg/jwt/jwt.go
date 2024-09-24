@@ -10,6 +10,8 @@ import (
 
 var ErrInvalidToken = errors.New("invalid JWT token")
 
+const LoginTokenLifetime = 1 * time.Hour
+
 type GMClaims struct {
 	jwt.RegisteredClaims
 	Login string

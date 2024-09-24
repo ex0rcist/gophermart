@@ -8,18 +8,21 @@ import (
 
 	"github.com/ex0rcist/gophermart/internal/domain"
 	"github.com/ex0rcist/gophermart/internal/entities"
-	"github.com/ex0rcist/gophermart/internal/storage"
+	mock_repository "github.com/ex0rcist/gophermart/internal/storage/repository/mocks"
 	"github.com/ex0rcist/gophermart/pkg/jwt"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
+	"go.uber.org/mock/gomock"
 )
 
 func TestAuthMiddleware_NoToken(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
 
-	mockStorage := new(storage.MockPGXStorage)
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockStorage := mock_repository.NewMockIUserRepository(ctrl)
 	secret := entities.Secret("test-secret")
 	r.Use(Auth(mockStorage, secret))
 
@@ -38,7 +41,10 @@ func TestAuthMiddleware_InvalidToken(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
 
-	mockStorage := new(storage.MockPGXStorage)
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockStorage := mock_repository.NewMockIUserRepository(ctrl)
 	secret := entities.Secret("test-secret")
 	r.Use(Auth(mockStorage, secret))
 
@@ -58,7 +64,10 @@ func TestAuthMiddleware_ExpiredToken(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
 
-	mockStorage := new(storage.MockPGXStorage)
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockStorage := mock_repository.NewMockIUserRepository(ctrl)
 	secret := entities.Secret("test-secret")
 
 	expiredToken, _ := jwt.CreateJWT(secret, "test-login", -1*time.Minute)
@@ -81,14 +90,17 @@ func TestAuthMiddleware_Success(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
 
-	mockStorage := new(storage.MockPGXStorage)
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockStorage := mock_repository.NewMockIUserRepository(ctrl)
 	secret := entities.Secret("test-secret")
 	dur := 1 * time.Hour
 
 	validToken, _ := jwt.CreateJWT(secret, "test-login", dur)
 
 	user := &domain.User{ID: 1, Login: "test-login"}
-	mockStorage.On("UserFindByLogin", mock.Anything, "test-login").Return(user, nil)
+	mockStorage.EXPECT().UserFindByLogin(gomock.Any(), "test-login").Return(user, nil)
 
 	r.Use(Auth(mockStorage, secret))
 	r.GET("/test", func(c *gin.Context) {

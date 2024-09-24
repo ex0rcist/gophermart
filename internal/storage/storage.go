@@ -9,44 +9,25 @@ import (
 	"github.com/ex0rcist/gophermart/internal/logging"
 	"github.com/ex0rcist/gophermart/internal/storage/tracer"
 	"github.com/golang-migrate/migrate/v4"
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
-var (
-	ErrRecordNotFound = errors.New("record not found")
-)
-
-// implements pgxpool.Pool
-type IPGXPool interface {
-	Acquire(ctx context.Context) (c *pgxpool.Conn, err error)
-	Begin(ctx context.Context) (pgx.Tx, error)
-	BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error)
-	Close()
-	Exec(ctx context.Context, sql string, arguments ...any) (pgconn.CommandTag, error)
-	Ping(ctx context.Context) error
-	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
-	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
-	SendBatch(ctx context.Context, b *pgx.Batch) (br pgx.BatchResults)
-}
+var ErrRecordNotFound = errors.New("record not found")
+var _ IPGXStorage = (*PGXStorage)(nil)
 
 type IPGXStorage interface {
 	GetPool() IPGXPool
-	StartTx(ctx context.Context) (*PGXTx, error)
 	Close()
 }
-
-var _ IPGXStorage = (*PGXStorage)(nil)
 
 type PGXStorage struct {
 	pool IPGXPool
 }
 
-func NewPGXStorage(config config.DB, pool IPGXPool, migrate bool) (*PGXStorage, error) {
+func NewPGXStorage(config config.DB, pool IPGXPool, migrate bool) (IPGXStorage, error) {
 	var err error
 
 	if migrate {
@@ -63,11 +44,6 @@ func NewPGXStorage(config config.DB, pool IPGXPool, migrate bool) (*PGXStorage, 
 	}
 
 	return &PGXStorage{pool: pool}, err
-}
-
-func (s *PGXStorage) StartTx(ctx context.Context) (*PGXTx, error) {
-	tx, err := s.pool.BeginTx(ctx, pgx.TxOptions{})
-	return &PGXTx{Tx: tx, ctx: ctx, committed: false, rolledBack: false}, err
 }
 
 func (s *PGXStorage) GetPool() IPGXPool {

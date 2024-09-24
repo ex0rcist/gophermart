@@ -109,7 +109,8 @@ func TestGetBonuses_RequestCreationError(t *testing.T) {
 func TestGetBonuses_BodyReadError(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"order":`)) // Некорректный JSON (неполный)
+		_, err := w.Write([]byte(`{"order":`))
+		assert.Nil(t, err)
 		w.WriteHeader(http.StatusOK)
 	}
 

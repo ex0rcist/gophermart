@@ -15,7 +15,7 @@ func main() {
 		logging.LogFatal(err)
 	}
 
-	apl, err := app.New(config)
+	apl, err := NewApp(config)
 	if err != nil {
 		logging.LogFatal(err)
 	}
@@ -24,4 +24,8 @@ func main() {
 	if err != nil {
 		logging.LogFatal(err)
 	}
+}
+
+func NewApp(config *config.Config) (*app.App, error) {
+	return app.New(config, nil, nil, nil)
 }

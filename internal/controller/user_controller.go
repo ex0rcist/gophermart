@@ -3,20 +3,20 @@ package controller
 import (
 	"net/http"
 
-	"github.com/ex0rcist/gophermart/internal/domain"
+	"github.com/ex0rcist/gophermart/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
 
 type UserController struct {
-	LoginUsecase           domain.ILoginUsecase
-	RegisterUsecase        domain.IRegisterUsecase
-	GetUserBalanceUsecase  domain.IGetUserBalanceUsecase
-	WithdrawBalanceUsecase domain.IWithdrawBalanceUsecase
+	LoginUsecase           usecase.ILoginUsecase
+	RegisterUsecase        usecase.IRegisterUsecase
+	GetUserBalanceUsecase  usecase.IGetUserBalanceUsecase
+	WithdrawBalanceUsecase usecase.IWithdrawBalanceUsecase
 }
 
 func (ctrl *UserController) Login(c *gin.Context) {
 	const errorPrefix = "UserController -> Login()"
-	var form domain.LoginRequest
+	var form usecase.LoginRequest
 	ctx := c.Request.Context()
 
 	err := c.ShouldBindJSON(&form)
@@ -27,7 +27,7 @@ func (ctrl *UserController) Login(c *gin.Context) {
 
 	token, err := ctrl.LoginUsecase.Call(ctx, form)
 	if err != nil {
-		if err == domain.ErrInvalidLoginOrPassword {
+		if err == usecase.ErrInvalidLoginOrPassword {
 			c.Status(http.StatusUnauthorized)
 			return
 		}
@@ -42,7 +42,7 @@ func (ctrl *UserController) Login(c *gin.Context) {
 
 func (ctrl *UserController) Register(c *gin.Context) {
 	const errorPrefix = "UserController -> Register()"
-	var form domain.RegisterRequest
+	var form usecase.RegisterRequest
 	ctx := c.Request.Context()
 
 	err := c.ShouldBindJSON(&form)
@@ -53,7 +53,7 @@ func (ctrl *UserController) Register(c *gin.Context) {
 
 	token, err := ctrl.RegisterUsecase.Call(ctx, form)
 	if err != nil {
-		if err == domain.ErrUserAlreadyExists {
+		if err == usecase.ErrUserAlreadyExists {
 			c.Status(http.StatusConflict)
 			return
 		}
@@ -71,7 +71,7 @@ func (ctrl *UserController) GetUserBalance(c *gin.Context) {
 	ctx := c.Request.Context()
 	currentUser := getCurrentUser(c)
 
-	bl, err := ctrl.GetUserBalanceUsecase.Fetch(ctx, currentUser.ID)
+	bl, err := ctrl.GetUserBalanceUsecase.Call(ctx, currentUser)
 	if err != nil {
 		handleInternalError(c, ctx, err, errorPrefix)
 		return
@@ -85,7 +85,7 @@ func (ctrl *UserController) WithdrawBalance(c *gin.Context) {
 	ctx := c.Request.Context()
 	currentUser := getCurrentUser(c)
 
-	var form = domain.WithdrawBalanceRequest{}
+	var form = usecase.WithdrawBalanceRequest{}
 	if err := c.ShouldBindJSON(&form); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
@@ -93,12 +93,12 @@ func (ctrl *UserController) WithdrawBalance(c *gin.Context) {
 
 	err := ctrl.WithdrawBalanceUsecase.Call(ctx, currentUser, form)
 	switch {
-	case err == domain.ErrInvalidOrderNumber:
+	case err == usecase.ErrInvalidOrderNumber:
 		// тут уже вторая валидация на Luhn,
 		// первая в form (для общего развития)
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
-	case err == domain.ErrInsufficientUserBalance:
+	case err == usecase.ErrInsufficientUserBalance:
 		c.Status(http.StatusPaymentRequired)
 		return
 	case err != nil:

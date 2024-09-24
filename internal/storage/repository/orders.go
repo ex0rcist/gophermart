@@ -10,11 +10,19 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+type IOrderRepository interface {
+	OrderCreate(ctx context.Context, o domain.Order) (*domain.Order, error)
+	OrderFindByNumber(ctx context.Context, number string) (*domain.Order, error)
+	OrderList(ctx context.Context, userID domain.UserID) ([]*domain.Order, error)
+	OrderListForUpdate(ctx context.Context) ([]*domain.Order, error)
+	OrderUpdate(ctx context.Context, tx pgx.Tx, o domain.Order) error
+}
+
 type orderRepository struct {
 	pool storage.IPGXPool
 }
 
-func NewOrderRepository(pool storage.IPGXPool) domain.IOrderRepository {
+func NewOrderRepository(pool storage.IPGXPool) IOrderRepository {
 	return &orderRepository{pool: pool}
 }
 
