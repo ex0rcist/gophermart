@@ -1,0 +1,3066 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>gophermart: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/ex0rcist/gophermart/cmd/gophermart/main.go (0.0%)</option>
+				
+				<option value="file1">github.com/ex0rcist/gophermart/internal/accrual/client.go (91.2%)</option>
+				
+				<option value="file2">github.com/ex0rcist/gophermart/internal/accrual/service.go (9.8%)</option>
+				
+				<option value="file3">github.com/ex0rcist/gophermart/internal/accrual/task.go (77.3%)</option>
+				
+				<option value="file4">github.com/ex0rcist/gophermart/internal/accrual/worker.go (100.0%)</option>
+				
+				<option value="file5">github.com/ex0rcist/gophermart/internal/app/app.go (22.2%)</option>
+				
+				<option value="file6">github.com/ex0rcist/gophermart/internal/config/config.go (69.1%)</option>
+				
+				<option value="file7">github.com/ex0rcist/gophermart/internal/controller/controller.go (75.0%)</option>
+				
+				<option value="file8">github.com/ex0rcist/gophermart/internal/controller/order_controller.go (86.7%)</option>
+				
+				<option value="file9">github.com/ex0rcist/gophermart/internal/controller/user_controller.go (71.4%)</option>
+				
+				<option value="file10">github.com/ex0rcist/gophermart/internal/controller/withdrawal_controller.go (100.0%)</option>
+				
+				<option value="file11">github.com/ex0rcist/gophermart/internal/domain/order.go (100.0%)</option>
+				
+				<option value="file12">github.com/ex0rcist/gophermart/internal/entities/decimal.go (100.0%)</option>
+				
+				<option value="file13">github.com/ex0rcist/gophermart/internal/entities/secret.go (57.1%)</option>
+				
+				<option value="file14">github.com/ex0rcist/gophermart/internal/entities/time.go (100.0%)</option>
+				
+				<option value="file15">github.com/ex0rcist/gophermart/internal/http_backend/backend.go (0.0%)</option>
+				
+				<option value="file16">github.com/ex0rcist/gophermart/internal/logging/debug.go (0.0%)</option>
+				
+				<option value="file17">github.com/ex0rcist/gophermart/internal/logging/error.go (0.0%)</option>
+				
+				<option value="file18">github.com/ex0rcist/gophermart/internal/logging/fatal.go (0.0%)</option>
+				
+				<option value="file19">github.com/ex0rcist/gophermart/internal/logging/info.go (0.0%)</option>
+				
+				<option value="file20">github.com/ex0rcist/gophermart/internal/logging/logging.go (48.4%)</option>
+				
+				<option value="file21">github.com/ex0rcist/gophermart/internal/logging/warn.go (0.0%)</option>
+				
+				<option value="file22">github.com/ex0rcist/gophermart/internal/middleware/auth.go (63.3%)</option>
+				
+				<option value="file23">github.com/ex0rcist/gophermart/internal/middleware/request_logger.go (23.5%)</option>
+				
+				<option value="file24">github.com/ex0rcist/gophermart/internal/storage/repository/orders.go (0.0%)</option>
+				
+				<option value="file25">github.com/ex0rcist/gophermart/internal/storage/repository/user.go (0.0%)</option>
+				
+				<option value="file26">github.com/ex0rcist/gophermart/internal/storage/repository/withdrawal.go (0.0%)</option>
+				
+				<option value="file27">github.com/ex0rcist/gophermart/internal/storage/storage.go (0.0%)</option>
+				
+				<option value="file28">github.com/ex0rcist/gophermart/internal/storage/tracer/tracer.go (81.8%)</option>
+				
+				<option value="file29">github.com/ex0rcist/gophermart/internal/usecase/order_create.go (91.7%)</option>
+				
+				<option value="file30">github.com/ex0rcist/gophermart/internal/usecase/order_list.go (100.0%)</option>
+				
+				<option value="file31">github.com/ex0rcist/gophermart/internal/usecase/user_balance.go (100.0%)</option>
+				
+				<option value="file32">github.com/ex0rcist/gophermart/internal/usecase/user_login.go (85.7%)</option>
+				
+				<option value="file33">github.com/ex0rcist/gophermart/internal/usecase/user_register.go (80.8%)</option>
+				
+				<option value="file34">github.com/ex0rcist/gophermart/internal/usecase/user_withdraw_balance.go (80.6%)</option>
+				
+				<option value="file35">github.com/ex0rcist/gophermart/internal/usecase/withdrawal_list.go (100.0%)</option>
+				
+				<option value="file36">github.com/ex0rcist/gophermart/internal/utils/http.go (100.0%)</option>
+				
+				<option value="file37">github.com/ex0rcist/gophermart/internal/utils/luhn.go (100.0%)</option>
+				
+				<option value="file38">github.com/ex0rcist/gophermart/internal/utils/request_id.go (100.0%)</option>
+				
+				<option value="file39">github.com/ex0rcist/gophermart/internal/utils/retrier/retrier.go (80.0%)</option>
+				
+				<option value="file40">github.com/ex0rcist/gophermart/internal/utils/security.go (80.0%)</option>
+				
+				<option value="file41">github.com/ex0rcist/gophermart/internal/utils/time.go (100.0%)</option>
+				
+				<option value="file42">github.com/ex0rcist/gophermart/internal/utils/validate.go (83.3%)</option>
+				
+				<option value="file43">github.com/ex0rcist/gophermart/pkg/jwt/jwt.go (81.2%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "fmt"
+
+        "github.com/ex0rcist/gophermart/internal/app"
+        "github.com/ex0rcist/gophermart/internal/config"
+        "github.com/ex0rcist/gophermart/internal/logging"
+)
+
+var (
+        buildVersion = "N/A"
+        buildDate    = "N/A"
+        buildCommit  = "N/A"
+)
+
+func main() <span class="cov0" title="0">{
+        logging.Setup()
+        fmt.Printf("Build version: %s\nBuild date: %s\nBuild commit: %s\n", buildVersion, buildDate, buildCommit)
+        logging.LogInfo("starting server...")
+
+        config, err := config.Parse()
+        if err != nil </span><span class="cov0" title="0">{
+                logging.LogFatal(err)
+        }</span>
+
+        <span class="cov0" title="0">apl, err := NewApp(config)
+        if err != nil </span><span class="cov0" title="0">{
+                logging.LogFatal(err)
+        }</span>
+
+        <span class="cov0" title="0">err = apl.Run()
+        if err != nil </span><span class="cov0" title="0">{
+                logging.LogFatal(err)
+        }</span>
+}
+
+func NewApp(config *config.Config) (*app.App, error) <span class="cov0" title="0">{
+        return app.New(config, nil, nil, nil)
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package accrual
+
+import (
+        "bytes"
+        "context"
+        "encoding/json"
+        "errors"
+        "fmt"
+        "io"
+        "net/http"
+        "strconv"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/logging"
+        "github.com/ex0rcist/gophermart/internal/utils"
+        "github.com/shopspring/decimal"
+)
+
+type AccrualStatus string
+
+const (
+        StatusRegistered AccrualStatus = "REGISTERED"
+        StatusInvalid    AccrualStatus = "INVALID"
+        StatusProcessing AccrualStatus = "PROCESSING"
+        StatusProcessed  AccrualStatus = "PROCESSED"
+)
+
+type IClient interface {
+        GetBonuses(ctx context.Context, orderNumber string) (*Response, *ClientError)
+}
+
+// клиент для работы с системой начисления бонусов
+type Client struct {
+        address string
+        client  *http.Client
+}
+
+type Response struct {
+        OrderNumber string          `json:"order"`
+        Status      AccrualStatus   `json:"status"`
+        Amount      decimal.Decimal `json:"accrual"`
+}
+
+type ClientError struct {
+        error
+        HTTPStatus int
+        RetryAfter time.Duration
+}
+
+func NewClient(address string, timeout time.Duration) *Client <span class="cov10" title="6">{
+        return &amp;Client{
+                address: address,
+                client:  &amp;http.Client{Timeout: timeout},
+        }
+}</span>
+
+func (c *Client) GetBonuses(ctx context.Context, orderNumber string) (*Response, *ClientError) <span class="cov10" title="6">{
+        url := fmt.Sprintf("%s/api/orders/%s", c.address, orderNumber)
+
+        req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+        if err != nil </span><span class="cov1" title="1">{
+                return nil, &amp;ClientError{error: err}
+        }</span>
+
+        <span class="cov9" title="5">req.Header.Set("Content-Length", "0")
+
+        logRequest(ctx, url)
+
+        res, err := c.client.Do(req)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, &amp;ClientError{error: err}
+        }</span>
+        <span class="cov9" title="5">defer res.Body.Close()
+        body, err := io.ReadAll(res.Body)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, &amp;ClientError{error: err}
+        }</span>
+
+        <span class="cov9" title="5">logResponse(ctx, res, body)
+
+        // 429 - возвращаем специальную ошибку
+        if res.StatusCode == http.StatusTooManyRequests </span><span class="cov1" title="1">{
+                return nil, c.handleErrTooManyRequests(res)
+        }</span>
+
+        // 204 - заказ еще не известен бонусной системе;
+        // согласно ТЗ, все заказы рано или поздно появятся в accrual,
+        // поэтому трактуем как StatusRegistered
+        <span class="cov7" title="4">if res.StatusCode == http.StatusNoContent </span><span class="cov1" title="1">{
+                return &amp;Response{OrderNumber: orderNumber, Status: StatusRegistered, Amount: decimal.NewFromInt(0)}, nil
+        }</span>
+
+        <span class="cov6" title="3">if res.StatusCode != http.StatusOK </span><span class="cov1" title="1">{
+                return nil, &amp;ClientError{error: errors.New(http.StatusText(res.StatusCode)), HTTPStatus: res.StatusCode}
+        }</span>
+
+        <span class="cov4" title="2">accrualRes := &amp;Response{}
+        err = json.NewDecoder(bytes.NewReader(body)).Decode(accrualRes)
+        if err != nil </span><span class="cov1" title="1">{
+                return nil, &amp;ClientError{error: err}
+        }</span>
+        <span class="cov1" title="1">return accrualRes, nil</span>
+}
+
+func (c *Client) handleErrTooManyRequests(res *http.Response) *ClientError <span class="cov1" title="1">{
+        accrualErr := ClientError{
+                error:      errors.New(http.StatusText(res.StatusCode)),
+                HTTPStatus: res.StatusCode,
+        }
+
+        retryAfter, err := strconv.Atoi(res.Header.Get("Retry-After"))
+        if err != nil </span><span class="cov0" title="0">{
+                return &amp;ClientError{error: err}
+        }</span>
+        <span class="cov1" title="1">accrualErr.RetryAfter = utils.IntToDuration(retryAfter)
+
+        return &amp;accrualErr</span>
+}
+
+func logRequest(ctx context.Context, url string) <span class="cov9" title="5">{
+        logging.LogInfoCtx(ctx, "sending request to: "+url)
+}</span>
+
+func logResponse(ctx context.Context, resp *http.Response, respBody []byte) <span class="cov9" title="5">{
+        logging.LogDebugCtx(ctx, fmt.Sprintf("response: %v; headers=%s; body=%s", resp.Status, utils.HeadersToStr(resp.Header), respBody))
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package accrual
+
+import (
+        "context"
+        "runtime"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/config"
+        "github.com/ex0rcist/gophermart/internal/logging"
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/ex0rcist/gophermart/internal/storage/repository"
+)
+
+type IService interface {
+        Push(t ITask)
+        Run() error
+        SetLockedUntil(lockedUntil time.Time)
+        GetLockedUntil() time.Time
+}
+
+type Service struct {
+        ctx context.Context
+
+        client    IClient
+        storage   storage.IPGXStorage
+        userRepo  repository.IUserRepository
+        orderRepo repository.IOrderRepository
+
+        taskCh chan ITask
+
+        contextTimeout time.Duration
+        refillInterval time.Duration
+
+        lockedUntil time.Time
+}
+
+func NewService(
+        ctx context.Context,
+        config *config.Accrual,
+        client IClient,
+        storage storage.IPGXStorage,
+        userRepo repository.IUserRepository,
+        orderRepo repository.IOrderRepository,
+) *Service <span class="cov10" title="4">{
+        if client == nil </span><span class="cov0" title="0">{
+                client = NewClient(config.Address, config.Timeout)
+        }</span>
+
+        <span class="cov10" title="4">if userRepo == nil </span><span class="cov0" title="0">{
+                userRepo = repository.NewUserRepository(storage.GetPool())
+        }</span>
+
+        <span class="cov10" title="4">if orderRepo == nil </span><span class="cov0" title="0">{
+                orderRepo = repository.NewOrderRepository(storage.GetPool())
+        }</span>
+
+        <span class="cov10" title="4">return &amp;Service{
+                ctx: ctx,
+
+                client:    client,
+                storage:   storage,
+                userRepo:  userRepo,
+                orderRepo: orderRepo,
+
+                taskCh: make(chan ITask),
+
+                contextTimeout: config.Timeout,
+                refillInterval: config.RefillInterval,
+        }</span>
+}
+
+func (s *Service) Run() error <span class="cov0" title="0">{
+        logging.LogInfoF("starting accrual service, spawning %d workers", runtime.NumCPU())
+        s.spawnWorkers()
+
+        err := s.refillChannel()
+        if err != nil </span><span class="cov0" title="0">{
+                logging.LogError(err, "error refilling accrual channel")
+                return err
+        }</span>
+
+        <span class="cov0" title="0">go func() </span><span class="cov0" title="0">{
+                for </span><span class="cov0" title="0">{
+                        select </span>{
+                        case &lt;-s.ctx.Done():<span class="cov0" title="0"> // проверка на остановку приложения
+                                logging.LogInfo("accrual refilling stopped")
+                                return</span>
+                        case &lt;-time.After(s.refillInterval):<span class="cov0" title="0"> // если не остановлено, выполняем заправку канала
+                                err := s.refillChannel()
+                                if err != nil </span><span class="cov0" title="0">{
+                                        logging.LogError(err, "err refilling channel")
+                                }</span>
+                        }
+                }
+        }()
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (s *Service) Push(t ITask) <span class="cov0" title="0">{
+        s.taskCh &lt;- t
+}</span>
+
+func (s *Service) SetLockedUntil(lockedUntil time.Time) <span class="cov0" title="0">{
+        if time.Now().After(lockedUntil) </span><span class="cov0" title="0">{
+                return
+        }</span>
+
+        <span class="cov0" title="0">s.lockedUntil = lockedUntil</span>
+}
+
+func (s *Service) GetLockedUntil() time.Time <span class="cov0" title="0">{
+        return s.lockedUntil
+}</span>
+
+func (s *Service) spawnWorkers() <span class="cov0" title="0">{
+        for i := 0; i &lt; runtime.NumCPU(); i++ </span><span class="cov0" title="0">{
+                worker := NewWorker(s)
+                go worker.Work(s.ctx, s.taskCh)
+        }</span>
+}
+
+func (s *Service) refillChannel() error <span class="cov0" title="0">{
+        logging.LogDebug("refilling channel...")
+
+        // частично исключаем дублирование задач
+        if len(s.taskCh) &gt; 0 </span><span class="cov0" title="0">{
+                logging.LogDebug("channel still has unread tasks, skipping")
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">orders, err := s.orderRepo.OrderListForUpdate(s.ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">for _, o := range orders </span><span class="cov0" title="0">{
+                t := Task{service: s, order: o}
+                s.Push(t)
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package accrual
+
+import (
+        "context"
+        "errors"
+        "fmt"
+
+        "github.com/ex0rcist/gophermart/internal/domain"
+        "github.com/ex0rcist/gophermart/internal/logging"
+        "github.com/ex0rcist/gophermart/internal/utils"
+        "github.com/jackc/pgx/v5"
+        "github.com/rs/zerolog/log"
+        "github.com/shopspring/decimal"
+)
+
+type ITask interface {
+        Handle() error
+}
+
+type Task struct {
+        service *Service
+        order   *domain.Order
+}
+
+func NewTask(service *Service, order *domain.Order) Task <span class="cov10" title="4">{
+        return Task{
+                service: service,
+                order:   order,
+        }
+}</span>
+
+func (t Task) Handle() error <span class="cov10" title="4">{
+        tCtx, cancel := context.WithTimeout(context.Background(), t.service.contextTimeout)
+        defer cancel()
+
+        // внедряем общую метку в логи запросов и логи сервиса, для облегчения чтения
+        ctx := setupCtxWithRID(tCtx)
+
+        // получаем статус и баланс из accrual
+        res, err := t.service.client.GetBonuses(ctx, t.order.Number)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        // проверяем
+        <span class="cov10" title="4">switch res.Status </span>{
+        case StatusRegistered:<span class="cov1" title="1">
+                // только что создан
+                logging.LogInfoCtx(ctx, fmt.Sprintf("%s is just created, do nothing", t.order))</span>
+
+        case StatusProcessing:<span class="cov1" title="1">
+                // в обработке; если статус в базе не совпадает, обновляем
+                logging.LogInfoCtx(ctx, fmt.Sprintf("%s is still in processing", t.order))
+                if t.order.Status != domain.OrderStatusProcessing </span><span class="cov1" title="1">{
+                        err := t.updateOrder(ctx, domain.OrderStatusProcessing, decimal.NewFromInt(0))
+                        if err != nil </span><span class="cov0" title="0">{
+                                return err
+                        }</span>
+                }
+
+        case StatusInvalid:<span class="cov1" title="1">
+                // invalid; обновляем статус
+                logging.LogInfoCtx(ctx, fmt.Sprintf("%s is invalid", t.order))
+                err := t.updateOrder(ctx, domain.OrderStatusInvalid, decimal.NewFromInt(0))
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+        case StatusProcessed:<span class="cov1" title="1">
+                // обработан; обновляем статус и сумму накоплений
+                logging.LogInfoCtx(ctx, fmt.Sprintf("%s processed, accrual=%s", t.order, res.Amount))
+                err := t.updateOrder(ctx, domain.OrderStatusProcessed, res.Amount)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+        }
+
+        <span class="cov10" title="4">return nil</span>
+}
+
+func (t Task) updateOrder(ctx context.Context, status domain.OrderStatus, amount decimal.Decimal) error <span class="cov8" title="3">{
+        tx, err := t.service.storage.GetPool().Begin(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="3">defer func() </span><span class="cov8" title="3">{
+                err := tx.Rollback(ctx)
+                if err != nil &amp;&amp; !errors.Is(err, pgx.ErrTxClosed) </span><span class="cov0" title="0">{
+                        logging.LogErrorCtx(ctx, err, "Task: updateOrder(): error rolling tx back")
+                }</span>
+        }()
+
+        <span class="cov8" title="3">err = t.service.orderRepo.OrderUpdate(ctx, tx, domain.Order{ID: t.order.ID, Status: status, Accrual: amount})
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="3">if status == domain.OrderStatusProcessed </span><span class="cov1" title="1">{
+                err = t.service.userRepo.UserUpdateBalanceAndWithdrawals(ctx, tx, t.order.UserID)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+        }
+
+        <span class="cov8" title="3">err = tx.Commit(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                logging.LogErrorCtx(ctx, err, "Task: updateOrder(): error commiting tx")
+                return err
+        }</span>
+
+        <span class="cov8" title="3">return nil</span>
+}
+
+func setupCtxWithRID(ctx context.Context) context.Context <span class="cov10" title="4">{
+        logger := log.Logger.With().Ctx(ctx).Str("rid", utils.GenerateRequestID()).Logger()
+        return logger.WithContext(ctx)
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package accrual
+
+import (
+        "context"
+        "errors"
+        "fmt"
+        "net/http"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/logging"
+)
+
+type Worker struct {
+        service IService
+}
+
+func NewWorker(service IService) Worker <span class="cov7" title="4">{
+        return Worker{service: service}
+}</span>
+
+func (w Worker) Work(ctx context.Context, taskCh chan ITask) <span class="cov7" title="4">{
+        for </span><span class="cov10" title="7">{
+                select </span>{
+                case &lt;-ctx.Done():<span class="cov1" title="1">
+                        logging.LogDebug("accrual worker stopping")
+                        return</span>
+                case &lt;-time.After(time.Until(w.service.GetLockedUntil())):<span class="cov9" title="6"></span>
+                        // сработает немедленно, если значение &lt;= 0
+                        // т.е. продолжит выполнение итерации
+                }
+
+                <span class="cov9" title="6">task := &lt;-taskCh
+                err := task.Handle()
+
+                var cErr *ClientError
+                if errors.As(err, &amp;cErr) </span><span class="cov1" title="1">{
+                        // если получили 429 от клиента
+                        if cErr.HTTPStatus == http.StatusTooManyRequests &amp;&amp; cErr.RetryAfter &gt; 0 </span><span class="cov1" title="1">{
+                                logging.LogInfoCtx(ctx, "got 429, setting retry-after")
+
+                                // блокируем до указанного времени
+                                w.service.SetLockedUntil(time.Now().Add(cErr.RetryAfter))
+
+                                // возвращаем задачу обратно в канал
+                                w.service.Push(task)
+                        }</span>
+
+                        <span class="cov1" title="1">logging.LogErrorCtx(ctx, fmt.Errorf("task failed: %w", err))
+                        continue</span>
+                }
+
+                <span class="cov4" title="2">if err != nil </span><span class="cov1" title="1">{
+                        logging.LogErrorCtx(ctx, fmt.Errorf("task failed: %w", err))
+                }</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package app
+
+import (
+        "context"
+        "fmt"
+        "net/http"
+        "os/signal"
+        "strings"
+        "syscall"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/accrual"
+        "github.com/ex0rcist/gophermart/internal/config"
+        httpbackend "github.com/ex0rcist/gophermart/internal/http_backend"
+        "github.com/ex0rcist/gophermart/internal/logging"
+        "github.com/ex0rcist/gophermart/internal/storage"
+)
+
+type App struct {
+        ctx         context.Context
+        config      *config.Config
+        storage     storage.IPGXStorage
+        httpBackend httpbackend.IHTTPBackend
+        accrService accrual.IService
+        cancelFunc  context.CancelFunc
+}
+
+func New(
+        config *config.Config,
+        pgxStorage storage.IPGXStorage,
+        accrService accrual.IService,
+        httpBackend httpbackend.IHTTPBackend,
+) (*App, error) <span class="cov8" title="1">{
+        var err error
+        ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+
+        if pgxStorage == nil </span><span class="cov0" title="0">{
+                pgxStorage, err = storage.NewPGXStorage(config.DB, nil, true)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("NewPGXStorage() failed: %w", err)
+                }</span>
+        }
+
+        <span class="cov8" title="1">if accrService == nil </span><span class="cov0" title="0">{
+                accrService = accrual.NewService(ctx, &amp;config.Accrual, nil, pgxStorage, nil, nil)
+        }</span>
+
+        <span class="cov8" title="1">if httpBackend == nil </span><span class="cov0" title="0">{
+                httpBackend = httpbackend.NewHTTPBackend(ctx, &amp;config.Server, pgxStorage)
+        }</span>
+
+        <span class="cov8" title="1">return &amp;App{
+                ctx:         ctx,
+                config:      config,
+                storage:     pgxStorage,
+                httpBackend: httpBackend,
+                accrService: accrService,
+                cancelFunc:  cancel,
+        }, nil</span>
+}
+
+func (a *App) Run() error <span class="cov0" title="0">{
+        logging.LogInfo(a.String())
+        logging.LogInfo("app ready")
+
+        // стартуем http backend
+        go func() </span><span class="cov0" title="0">{
+                err := a.httpBackend.Run()
+                if err != nil &amp;&amp; err != http.ErrServerClosed </span><span class="cov0" title="0">{
+                        logging.LogError(err, "httpServer error")
+                        a.cancelFunc()
+                }</span>
+        }()
+
+        // стартуем интеграцию с accrual
+        // NB: остановка a.accrService не требуется, т.к. он слушает a.ctx
+        <span class="cov0" title="0">go func() </span><span class="cov0" title="0">{
+                err := a.accrService.Run()
+                if err != nil </span><span class="cov0" title="0">{
+                        logging.LogError(err, "accrualService error")
+                        a.cancelFunc()
+                }</span>
+        }()
+
+        <span class="cov0" title="0">&lt;-a.ctx.Done() // ждем сигнал от NotifyContext
+
+        // останавливаем сервер
+        logging.LogInfo("stopping server... ")
+        ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+        defer cancel()
+        if err := a.httpBackend.Shutdown(ctx); err != nil </span><span class="cov0" title="0">{
+                logging.LogError(err, "err stopping server")
+        }</span>
+
+        // ждем остановку http.Server
+        <span class="cov0" title="0">&lt;-ctx.Done()
+        logging.LogInfo("server stopped")
+
+        // закрываем коннекты к БД
+        a.storage.Close()
+        logging.LogInfo("storage closed")
+
+        return nil</span>
+}
+
+func (a *App) String() string <span class="cov8" title="1">{
+        str := []string{
+                fmt.Sprintf("gophermart-address=%s", a.config.Server.Address),
+                fmt.Sprintf("accrual-address=%s", a.config.Accrual.Address),
+                fmt.Sprintf("database=%s", a.config.DB.DSN),
+                fmt.Sprintf("secret=%s", a.config.Server.Secret),
+        }
+
+        return "app config: " + strings.Join(str, "; ")
+}</span>
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package config
+
+import (
+        "fmt"
+        "net"
+        "net/url"
+        "os"
+        "strings"
+        "time"
+
+        "github.com/caarlos0/env/v11"
+        "github.com/ex0rcist/gophermart/internal/entities"
+        "github.com/ex0rcist/gophermart/internal/utils"
+        "github.com/spf13/pflag"
+        "golang.org/x/sync/errgroup"
+)
+
+type DB struct {
+        DSN              string `env:"DATABASE_URI"`
+        MigrationsSource string
+}
+
+type Server struct {
+        Address string `env:"RUN_ADDRESS"`
+        Timeout time.Duration
+        Secret  entities.Secret `env:"APP_KEY"`
+}
+
+type Accrual struct {
+        Address        string `env:"ACCRUAL_SYSTEM_ADDRESS"`
+        Timeout        time.Duration
+        RefillInterval time.Duration
+}
+
+type Config struct {
+        DB      DB
+        Server  Server
+        Accrual Accrual
+}
+
+func Parse() (*Config, error) <span class="cov0" title="0">{
+        var err error
+
+        cfg := &amp;Config{}
+
+        // порядок парсинга настроек: дефолтные; ENV; flags
+        fns := []func(*Config) (*Config, error){
+                NewDefault, ConfigFromEnv, ConfigFromFlags,
+        }
+
+        for _, fn := range fns </span><span class="cov0" title="0">{
+                cfg, err = fn(cfg)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+        }
+
+        <span class="cov0" title="0">if err = validateConfig(cfg); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return cfg, nil</span>
+}
+
+func NewDefault(_ *Config) (*Config, error) <span class="cov1" title="1">{
+        config := &amp;Config{
+                DB: DB{
+                        MigrationsSource: "file://internal/storage/migrations",
+                },
+                Server: Server{
+                        Address: "0.0.0.0:8080",
+                        Timeout: 5 * time.Second,
+                },
+                Accrual: Accrual{
+                        Address:        "0.0.0.0:8181",
+                        RefillInterval: 5 * time.Second,
+                        Timeout:        5 * time.Second,
+                },
+        }
+
+        return config, nil
+}</span>
+
+func ConfigFromFlags(config *Config) (*Config, error) <span class="cov1" title="1">{
+        flags := pflag.NewFlagSet(os.Args[0], pflag.ContinueOnError)
+
+        flags.StringVarP(&amp;config.DB.DSN, "database", "d", config.DB.DSN, "PostgreSQL database DSN")
+        flags.StringVarP(&amp;config.Accrual.Address, "accrual-address", "r", config.Accrual.Address, "address:port for accrual service")
+        flags.StringVarP(&amp;config.Server.Address, "gophermart-address", "a", config.Server.Address, "address:port for HTTP API requests")
+        flags.VarP(&amp;config.Server.Secret, "secret", "k", "a key to sign data; will be generated automatically if empty")
+
+        err := flags.Parse(os.Args[1:])
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">if len(config.Server.Secret) &lt;= 0 </span><span class="cov1" title="1">{
+                config.Server.Secret = entities.Secret(utils.GenerateRandomString(16))
+        }</span>
+
+        <span class="cov1" title="1">return config, err</span>
+}
+
+func ConfigFromEnv(config *Config) (*Config, error) <span class="cov1" title="1">{
+        if err := env.Parse(config); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">return config, nil</span>
+}
+
+func validateConfig(c *Config) error <span class="cov6" title="3">{
+        g := &amp;errgroup.Group{}
+        g.Go(func() error </span><span class="cov6" title="3">{ return validateAddr(c.Server.Address) }</span>)
+        <span class="cov6" title="3">g.Go(func() error </span><span class="cov6" title="3">{ return validateAddr(c.Accrual.Address) }</span>)
+        <span class="cov6" title="3">g.Go(func() error </span><span class="cov6" title="3">{ return validateDSN(c.DB.DSN) }</span>)
+        <span class="cov6" title="3">return g.Wait()</span>
+}
+
+func validateAddr(address string) error <span class="cov10" title="6">{
+        if !strings.HasPrefix(address, "http://") &amp;&amp; !strings.HasPrefix(address, "https://") </span><span class="cov10" title="6">{
+                address = "http://" + address
+        }</span>
+
+        <span class="cov10" title="6">parsedURL, err := url.Parse(address)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("error parsing URL: %w", err)
+        }</span>
+
+        // проверяем наличие хоста
+        <span class="cov10" title="6">host := parsedURL.Host
+        if host == "" </span><span class="cov0" title="0">{
+                return fmt.Errorf("error parsing URL: host is missing")
+        }</span>
+
+        // проверяем хост и порт с помощью net.SplitHostPort
+        <span class="cov10" title="6">hostOnly, port, err := net.SplitHostPort(host)
+        if err != nil </span><span class="cov1" title="1">{
+                return fmt.Errorf("error parsing URL: %w", err)
+        }</span>
+
+        // проверяем корректность IP или доменного имени
+        <span class="cov9" title="5">if net.ParseIP(hostOnly) == nil </span><span class="cov0" title="0">{
+                if _, err := net.LookupHost(hostOnly); err != nil </span><span class="cov0" title="0">{
+                        return fmt.Errorf("error parsing ip: invalid host or IP: %w", err)
+                }</span>
+        }
+
+        // проверяем корректность порта (если он был указан)
+        <span class="cov9" title="5">if port != "" </span><span class="cov9" title="5">{
+                if _, err := net.LookupPort("tcp", port); err != nil </span><span class="cov0" title="0">{
+                        return fmt.Errorf("error parsing ip: invalid port: %w", err)
+                }</span>
+        }
+
+        <span class="cov9" title="5">return nil</span>
+}
+
+func validateDSN(dsn string) error <span class="cov6" title="3">{
+        if dsn == "" </span><span class="cov1" title="1">{
+                return fmt.Errorf("empty DB DSN")
+        }</span>
+
+        <span class="cov4" title="2">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package controller
+
+import (
+        "context"
+        "fmt"
+        "net/http"
+
+        "github.com/ex0rcist/gophermart/internal/domain"
+        "github.com/ex0rcist/gophermart/internal/logging"
+        "github.com/ex0rcist/gophermart/internal/middleware"
+        "github.com/gin-gonic/gin"
+)
+
+func handleInternalError(c *gin.Context, ctx context.Context, err error, ep string) <span class="cov3" title="2">{
+        logging.LogErrorCtx(ctx, wrap(ep, err))
+        c.Status(http.StatusInternalServerError)
+}</span>
+
+func wrap(prefix string, err error) error <span class="cov3" title="2">{
+        return fmt.Errorf("%s: %s", prefix, err.Error())
+}</span>
+
+func getCurrentUser(c *gin.Context) *domain.User <span class="cov10" title="14">{
+        user, exists := c.Get(middleware.UserContextKey)
+        if !exists </span><span class="cov10" title="14">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">currentUser := user.(*domain.User)
+        return currentUser</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package controller
+
+import (
+        "net/http"
+        "strings"
+
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/ex0rcist/gophermart/internal/usecase"
+        "github.com/gin-gonic/gin"
+)
+
+type OrderController struct {
+        OrderCreateUsecase usecase.IOrderCreateUsecase
+        OrderListUsecase   usecase.IOrderListUsecase
+}
+
+func (ctrl *OrderController) CreateOrder(c *gin.Context) <span class="cov10" title="4">{
+        const errorPrefix = "OrderController -&gt; CreateOrder()"
+        ctx := c.Request.Context()
+        currentUser := getCurrentUser(c)
+
+        body, err := c.GetRawData()
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to read request body"})
+                return
+        }</span>
+        <span class="cov10" title="4">number := strings.TrimSpace(string(body))
+
+        _, err = ctrl.OrderCreateUsecase.Create(ctx, currentUser, number)
+        if err != nil </span><span class="cov8" title="3">{
+                switch </span>{
+                case err == usecase.ErrInvalidOrderNumber:<span class="cov1" title="1">
+                        c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+                        return</span>
+                case err == usecase.ErrOrderAlreadyRegistered:<span class="cov1" title="1">
+                        c.Status(http.StatusOK)
+                        return</span>
+                case err == usecase.ErrOrderConflict:<span class="cov1" title="1">
+                        c.Status(http.StatusConflict)
+                        return</span>
+                default:<span class="cov0" title="0">
+                        handleInternalError(c, ctx, err, errorPrefix)
+                        return</span>
+                }
+        }
+
+        // приняли в обработку
+        <span class="cov1" title="1">c.Status(http.StatusAccepted)</span>
+}
+func (ctrl *OrderController) OrderList(c *gin.Context) <span class="cov8" title="3">{
+        const errorPrefix = "OrderController -&gt; OrderList()"
+        ctx := c.Request.Context()
+        currentUser := getCurrentUser(c)
+
+        orders, err := ctrl.OrderListUsecase.Call(ctx, currentUser)
+        if err != nil &amp;&amp; err != storage.ErrRecordNotFound </span><span class="cov1" title="1">{
+                handleInternalError(c, ctx, err, errorPrefix)
+                return
+        }</span>
+
+        <span class="cov5" title="2">if len(orders) == 0 </span><span class="cov1" title="1">{
+                c.Status(http.StatusNoContent)
+        }</span> else<span class="cov1" title="1"> {
+                c.JSON(http.StatusOK, orders)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package controller
+
+import (
+        "net/http"
+
+        "github.com/ex0rcist/gophermart/internal/usecase"
+        "github.com/gin-gonic/gin"
+)
+
+type UserController struct {
+        LoginUsecase           usecase.ILoginUsecase
+        RegisterUsecase        usecase.IRegisterUsecase
+        GetUserBalanceUsecase  usecase.IGetUserBalanceUsecase
+        WithdrawBalanceUsecase usecase.IWithdrawBalanceUsecase
+}
+
+func (ctrl *UserController) Login(c *gin.Context) <span class="cov10" title="2">{
+        const errorPrefix = "UserController -&gt; Login()"
+        var form usecase.LoginRequest
+        ctx := c.Request.Context()
+
+        err := c.ShouldBindJSON(&amp;form)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+                return
+        }</span>
+
+        <span class="cov10" title="2">token, err := ctrl.LoginUsecase.Call(ctx, form)
+        if err != nil </span><span class="cov1" title="1">{
+                if err == usecase.ErrInvalidLoginOrPassword </span><span class="cov1" title="1">{
+                        c.Status(http.StatusUnauthorized)
+                        return
+                }</span>
+
+                <span class="cov0" title="0">handleInternalError(c, ctx, err, errorPrefix)
+                return</span>
+        }
+
+        <span class="cov1" title="1">c.Header("Authorization", token)
+        c.Status(http.StatusOK)</span>
+}
+
+func (ctrl *UserController) Register(c *gin.Context) <span class="cov10" title="2">{
+        const errorPrefix = "UserController -&gt; Register()"
+        var form usecase.RegisterRequest
+        ctx := c.Request.Context()
+
+        err := c.ShouldBindJSON(&amp;form)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+                return
+        }</span>
+
+        <span class="cov10" title="2">token, err := ctrl.RegisterUsecase.Call(ctx, form)
+        if err != nil </span><span class="cov1" title="1">{
+                if err == usecase.ErrUserAlreadyExists </span><span class="cov1" title="1">{
+                        c.Status(http.StatusConflict)
+                        return
+                }</span>
+
+                <span class="cov0" title="0">handleInternalError(c, ctx, err, errorPrefix)
+                return</span>
+        }
+
+        <span class="cov1" title="1">c.Header("Authorization", token)
+        c.Status(http.StatusOK)</span>
+}
+
+func (ctrl *UserController) GetUserBalance(c *gin.Context) <span class="cov1" title="1">{
+        const errorPrefix = "UserController -&gt; GetUserBalance()"
+        ctx := c.Request.Context()
+        currentUser := getCurrentUser(c)
+
+        bl, err := ctrl.GetUserBalanceUsecase.Call(ctx, currentUser)
+        if err != nil </span><span class="cov0" title="0">{
+                handleInternalError(c, ctx, err, errorPrefix)
+                return
+        }</span>
+
+        <span class="cov1" title="1">c.JSON(http.StatusOK, bl)</span>
+}
+
+func (ctrl *UserController) WithdrawBalance(c *gin.Context) <span class="cov10" title="2">{
+        const ep = "UserController -&gt; WithdrawBalance()"
+        ctx := c.Request.Context()
+        currentUser := getCurrentUser(c)
+
+        var form = usecase.WithdrawBalanceRequest{}
+        if err := c.ShouldBindJSON(&amp;form); err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+                return
+        }</span>
+
+        <span class="cov10" title="2">err := ctrl.WithdrawBalanceUsecase.Call(ctx, currentUser, form)
+        switch </span>{
+        case err == usecase.ErrInvalidOrderNumber:<span class="cov0" title="0">
+                // тут уже вторая валидация на Luhn,
+                // первая в form (для общего развития)
+                c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+                return</span>
+        case err == usecase.ErrInsufficientUserBalance:<span class="cov1" title="1">
+                c.Status(http.StatusPaymentRequired)
+                return</span>
+        case err != nil:<span class="cov0" title="0">
+                handleInternalError(c, ctx, err, ep)
+                return</span>
+        }
+
+        <span class="cov1" title="1">c.Status(http.StatusOK)</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package controller
+
+import (
+        "net/http"
+
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/ex0rcist/gophermart/internal/usecase"
+        "github.com/gin-gonic/gin"
+)
+
+type WithdrawalController struct {
+        WithdrawalListUsecase usecase.IWithdrawalListUsecase
+}
+
+func (ctrl *WithdrawalController) WithdrawalList(c *gin.Context) <span class="cov10" title="4">{
+        const errorPrefix = "WithdrawalController -&gt; WithdrawalList()"
+        ctx := c.Request.Context()
+        currentUser := getCurrentUser(c)
+
+        wds, err := ctrl.WithdrawalListUsecase.Call(ctx, currentUser)
+        if err != nil &amp;&amp; err != storage.ErrRecordNotFound </span><span class="cov1" title="1">{
+                handleInternalError(c, ctx, err, errorPrefix)
+                return
+        }</span>
+
+        <span class="cov8" title="3">if len(wds) == 0 </span><span class="cov5" title="2">{
+                c.Status(http.StatusNoContent)
+        }</span> else<span class="cov1" title="1"> {
+                c.JSON(http.StatusOK, wds)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package domain
+
+import (
+        "fmt"
+        "strings"
+        "time"
+
+        "github.com/shopspring/decimal"
+)
+
+type OrderID int32
+type OrderStatus string
+
+const (
+        OrderStatusNew        OrderStatus = "NEW"
+        OrderStatusProcessing OrderStatus = "PROCESSING"
+        OrderStatusInvalid    OrderStatus = "INVALID"
+        OrderStatusProcessed  OrderStatus = "PROCESSED"
+)
+
+type Order struct {
+        ID        OrderID
+        UserID    UserID
+        Number    string
+        Status    OrderStatus
+        Accrual   decimal.Decimal
+        CreatedAt time.Time
+        UpdatedAt time.Time
+}
+
+func (o *Order) String() string <span class="cov10" title="4">{
+        str := []string{
+                fmt.Sprintf("user_id=%d", o.UserID),
+                fmt.Sprintf("number=%s", o.Number),
+                fmt.Sprintf("status=%s", o.Status),
+                fmt.Sprintf("accrual=%s", o.Accrual),
+        }
+
+        return fmt.Sprintf("order(id=%d)[%s]", o.ID, strings.Join(str, ";"))
+}</span>
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package entities
+
+import "github.com/shopspring/decimal"
+
+// gophermart decimal
+// сериализация decimal по-умолчанию идёт в строку
+type GDecimal decimal.Decimal
+
+// автотесты требуют, чтобы в ответе были числа, а не строки
+func (d GDecimal) MarshalJSON() ([]byte, error) <span class="cov10" title="4">{
+        return []byte(decimal.Decimal(d).String()), nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package entities
+
+import (
+        "strings"
+)
+
+type Secret string
+
+func (s *Secret) Set(src string) error <span class="cov0" title="0">{
+        *s = Secret(src)
+        return nil
+}</span>
+
+func (s Secret) Type() string <span class="cov0" title="0">{
+        return "string"
+}</span>
+
+func (s Secret) String() string <span class="cov10" title="2">{
+        if len(s) &lt;= 2 </span><span class="cov1" title="1">{
+                return string(s)
+        }</span>
+
+        <span class="cov1" title="1">masked := strings.Repeat("*", len(s)-2)
+        return string(s[0]) + masked + string(s[len(s)-1])</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package entities
+
+import "time"
+
+type RFC3339Time time.Time
+
+func (t RFC3339Time) MarshalJSON() ([]byte, error) <span class="cov10" title="3">{
+        formatted := time.Time(t).Format(time.RFC3339)
+        return []byte(`"` + formatted + `"`), nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package httpbackend
+
+import (
+        "context"
+        "net/http"
+
+        "github.com/ex0rcist/gophermart/internal/config"
+        "github.com/ex0rcist/gophermart/internal/controller"
+        "github.com/ex0rcist/gophermart/internal/middleware"
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/ex0rcist/gophermart/internal/storage/repository"
+        "github.com/ex0rcist/gophermart/internal/usecase"
+        "github.com/gin-gonic/gin"
+        "github.com/rs/zerolog/log"
+)
+
+type IHTTPBackend interface {
+        Run() error
+        Shutdown(ctx context.Context) error
+}
+
+type HTTPBackend struct {
+        config     *config.Server
+        httpServer *http.Server
+        router     *gin.Engine
+        storage    storage.IPGXStorage
+}
+
+func NewHTTPBackend(ctx context.Context, config *config.Server, storage storage.IPGXStorage) *HTTPBackend <span class="cov0" title="0">{
+        b := &amp;HTTPBackend{config: config, storage: storage}
+        b.setupRouter()
+        b.setupRoutes()
+        b.setupServer()
+
+        return b
+}</span>
+
+func (b *HTTPBackend) Run() error <span class="cov0" title="0">{
+        return b.httpServer.ListenAndServe()
+}</span>
+
+func (b *HTTPBackend) Shutdown(ctx context.Context) error <span class="cov0" title="0">{
+        return b.httpServer.Shutdown(ctx)
+}</span>
+
+func (b *HTTPBackend) setupRouter() <span class="cov0" title="0">{
+        gin.SetMode(gin.ReleaseMode)
+        gin.DefaultWriter = log.Logger
+
+        router := gin.New()
+
+        router.Use(gin.Recovery())
+        router.Use(middleware.RequestsLogger())
+
+        b.router = router
+}</span>
+
+func (b *HTTPBackend) setupRoutes() <span class="cov0" title="0">{
+        b.router.GET("/ping", func(c *gin.Context) </span><span class="cov0" title="0">{
+                c.JSON(http.StatusOK, gin.H{"message": "pong"})
+        }</span>)
+
+        <span class="cov0" title="0">publicRouter := b.router.Group("")
+
+        privateRouter := b.router.Group("")
+        privateRouter.Use(middleware.Auth(
+                repository.NewUserRepository(b.storage.GetPool()),
+                b.config.Secret,
+        ))
+
+        b.setupUserController(publicRouter, privateRouter)
+        b.setupOrderController(publicRouter, privateRouter)
+        b.setupWithdrawalController(publicRouter, privateRouter)</span>
+}
+
+func (b *HTTPBackend) setupUserController(publicRouter *gin.RouterGroup, privateRouter *gin.RouterGroup) <span class="cov0" title="0">{
+        userRepo := repository.NewUserRepository(b.storage.GetPool())
+        wdrwRepo := repository.NewWithdrawalRepository(b.storage.GetPool())
+
+        ctrl := &amp;controller.UserController{
+                LoginUsecase:           usecase.NewLoginUsecase(b.storage, userRepo, b.config.Secret, b.config.Timeout),
+                RegisterUsecase:        usecase.NewRegisterUsecase(b.storage, userRepo, b.config.Secret, b.config.Timeout),
+                GetUserBalanceUsecase:  usecase.NewGetUserBalanceUsecase(b.storage, userRepo, b.config.Timeout),
+                WithdrawBalanceUsecase: usecase.NewWithdrawBalanceUsecase(b.storage, userRepo, wdrwRepo, b.config.Timeout),
+        }
+
+        publicRouter.POST("/api/user/register", ctrl.Register)
+        publicRouter.POST("/api/user/login", ctrl.Login)
+
+        privateRouter.GET("/api/user/balance", ctrl.GetUserBalance)
+        privateRouter.POST("/api/user/balance/withdraw", ctrl.WithdrawBalance)
+}</span>
+
+func (b *HTTPBackend) setupOrderController(_ *gin.RouterGroup, privateRouter *gin.RouterGroup) <span class="cov0" title="0">{
+        repo := repository.NewOrderRepository(b.storage.GetPool())
+
+        ctrl := &amp;controller.OrderController{
+                OrderCreateUsecase: usecase.NewOrderCreateUsecase(b.storage, repo, b.config.Timeout),
+                OrderListUsecase:   usecase.NewOrderListUsecase(b.storage, repo, b.config.Timeout),
+        }
+
+        privateRouter.POST("/api/user/orders", ctrl.CreateOrder)
+        privateRouter.GET("/api/user/orders", ctrl.OrderList)
+}</span>
+
+func (b *HTTPBackend) setupWithdrawalController(_ *gin.RouterGroup, privateRouter *gin.RouterGroup) <span class="cov0" title="0">{
+        repo := repository.NewWithdrawalRepository(b.storage.GetPool())
+
+        ctrl := &amp;controller.WithdrawalController{
+                WithdrawalListUsecase: usecase.NewWithdrawalListUsecase(b.storage, repo, b.config.Timeout),
+        }
+
+        privateRouter.GET("/api/user/withdrawals", ctrl.WithdrawalList)
+}</span>
+
+func (b *HTTPBackend) setupServer() <span class="cov0" title="0">{
+        b.httpServer = &amp;http.Server{
+                Addr:    b.config.Address,
+                Handler: b.router.Handler(),
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package logging
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/rs/zerolog"
+        "github.com/rs/zerolog/log"
+)
+
+func LogDebugF(format string, args ...any) <span class="cov0" title="0">{
+        message := fmt.Sprintf(format, args...)
+        logDebug(&amp;log.Logger, message)
+}</span>
+
+func LogDebug(messages ...string) <span class="cov0" title="0">{
+        logDebug(&amp;log.Logger, messages...)
+}</span>
+
+func LogDebugCtx(ctx context.Context, messages ...string) <span class="cov0" title="0">{
+        logger := loggerFromContext(ctx)
+        logDebug(logger, messages...)
+}</span>
+
+func logDebug(logger *zerolog.Logger, messages ...string) <span class="cov0" title="0">{
+        msg := optMessagesToString(messages)
+        logger.Debug().Msg(msg)
+}</span>
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package logging
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/rs/zerolog"
+        "github.com/rs/zerolog/log"
+)
+
+func LogErrorF(format string, err error) <span class="cov0" title="0">{
+        fErr := fmt.Errorf(format, err)
+        logError(&amp;log.Logger, fErr)
+}</span>
+
+func LogError(err error, messages ...string) <span class="cov0" title="0">{
+        logError(&amp;log.Logger, err, messages...)
+}</span>
+
+func LogErrorCtx(ctx context.Context, err error, messages ...string) <span class="cov0" title="0">{
+        logger := loggerFromContext(ctx)
+        logError(logger, err, messages...)
+}</span>
+
+func logError(logger *zerolog.Logger, err error, messages ...string) <span class="cov0" title="0">{
+        msg := optMessagesToString(messages)
+
+        if isDebugLevel() </span><span class="cov0" title="0">{
+                logger.Error().Stack().Err(err).Msg(msg) // Stack() must be called before Err()
+        }</span> else<span class="cov0" title="0"> {
+                logger.Error().Err(err).Msg(msg)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package logging
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/rs/zerolog"
+        "github.com/rs/zerolog/log"
+)
+
+func LogFatalF(format string, err error) <span class="cov0" title="0">{
+        fErr := fmt.Errorf(format, err)
+        logFatal(&amp;log.Logger, fErr)
+}</span>
+
+func LogFatal(err error, messages ...string) <span class="cov0" title="0">{
+        logFatal(&amp;log.Logger, err, messages...)
+}</span>
+
+func LogFatalCtx(ctx context.Context, err error, messages ...string) <span class="cov0" title="0">{
+        logger := loggerFromContext(ctx)
+        logFatal(logger, err, messages...)
+}</span>
+
+func logFatal(logger *zerolog.Logger, err error, messages ...string) <span class="cov0" title="0">{
+        msg := optMessagesToString(messages)
+
+        if isDebugLevel() </span><span class="cov0" title="0">{
+                logger.Fatal().Stack().Err(err).Msg(msg) // Stack() must be called before Err()
+        }</span> else<span class="cov0" title="0"> {
+                logger.Fatal().Err(err).Msg(msg)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package logging
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/rs/zerolog"
+        "github.com/rs/zerolog/log"
+)
+
+func LogInfoF(format string, args ...any) <span class="cov0" title="0">{
+        message := fmt.Sprintf(format, args...)
+        logInfo(&amp;log.Logger, message)
+}</span>
+
+func LogInfo(messages ...string) <span class="cov0" title="0">{
+        logInfo(&amp;log.Logger, messages...)
+}</span>
+
+func LogInfoCtx(ctx context.Context, messages ...string) <span class="cov0" title="0">{
+        logger := loggerFromContext(ctx)
+        logInfo(logger, messages...)
+}</span>
+
+func logInfo(logger *zerolog.Logger, messages ...string) <span class="cov0" title="0">{
+        msg := optMessagesToString(messages)
+        logger.Info().Msg(msg)
+}</span>
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package logging
+
+import (
+        "context"
+        "fmt"
+        "io"
+        "os"
+        "strings"
+        "time"
+
+        "github.com/caarlos0/env/v11"
+        "github.com/rs/zerolog"
+        "github.com/rs/zerolog/log"
+        "github.com/rs/zerolog/pkgerrors"
+)
+
+type config struct {
+        ENV string `env:"APP_ENV" envDefault:"development"`
+}
+
+func Setup() <span class="cov8" title="1">{
+        cfg := parseConfig()
+
+        var output io.Writer
+        var logger zerolog.Logger
+
+        switch cfg.ENV </span>{
+        case "tracing":<span class="cov0" title="0">
+                zerolog.SetGlobalLevel(zerolog.TraceLevel)
+                zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
+
+                output = zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339Nano}</span>
+        case "development":<span class="cov8" title="1">
+                zerolog.SetGlobalLevel(zerolog.DebugLevel)
+
+                output = zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339Nano}</span>
+        case "production":<span class="cov0" title="0">
+                zerolog.SetGlobalLevel(zerolog.InfoLevel)
+
+                output = os.Stdout</span>
+        }
+
+        <span class="cov8" title="1">loggerCtx := zerolog.New(output).With().Timestamp()
+        switch </span>{
+        case isTraceLevel():<span class="cov0" title="0">
+                logger = loggerCtx.Caller().Logger()</span>
+        default:<span class="cov8" title="1">
+                logger = loggerCtx.Logger()</span>
+        }
+
+        <span class="cov8" title="1">log.Logger = logger
+        zerolog.DefaultContextLogger = &amp;logger</span>
+}
+
+func parseConfig() config <span class="cov8" title="1">{
+        cfg := config{}
+        if err := env.Parse(&amp;cfg); err != nil </span><span class="cov0" title="0">{
+                fmt.Printf("%+v\n", err)
+        }</span>
+
+        <span class="cov8" title="1">return cfg</span>
+}
+
+func optMessagesToString(messages []string) string <span class="cov0" title="0">{
+        if len(messages) == 0 </span><span class="cov0" title="0">{
+                return ""
+        }</span>
+
+        // remove empty
+        <span class="cov0" title="0">var result []string
+        for _, str := range messages </span><span class="cov0" title="0">{
+                if str != "" </span><span class="cov0" title="0">{
+                        result = append(result, str)
+                }</span>
+        }
+
+        <span class="cov0" title="0">return strings.Join(result, "; ")</span>
+}
+
+func loggerFromContext(ctx context.Context) *zerolog.Logger <span class="cov0" title="0">{
+        return zerolog.Ctx(ctx)
+}</span>
+
+func isDebugLevel() bool <span class="cov0" title="0">{
+        return zerolog.GlobalLevel() == zerolog.DebugLevel
+}</span>
+
+func isTraceLevel() bool <span class="cov8" title="1">{
+        return zerolog.GlobalLevel() == zerolog.TraceLevel
+}</span>
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package logging
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/rs/zerolog"
+        "github.com/rs/zerolog/log"
+)
+
+func LogWarnF(format string, args ...any) <span class="cov0" title="0">{
+        message := fmt.Sprintf(format, args...)
+        logWarn(&amp;log.Logger, message)
+}</span>
+
+func LogWarn(messages ...string) <span class="cov0" title="0">{
+        logWarn(&amp;log.Logger, messages...)
+}</span>
+
+func LogWarnCtx(ctx context.Context, messages ...string) <span class="cov0" title="0">{
+        logger := loggerFromContext(ctx)
+        logWarn(logger, messages...)
+}</span>
+
+func logWarn(logger *zerolog.Logger, messages ...string) <span class="cov0" title="0">{
+        msg := optMessagesToString(messages)
+        logger.Warn().Msg(msg)
+}</span>
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package middleware
+
+import (
+        "github.com/ex0rcist/gophermart/internal/entities"
+        "github.com/ex0rcist/gophermart/internal/logging"
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/ex0rcist/gophermart/internal/storage/repository"
+        "github.com/ex0rcist/gophermart/pkg/jwt"
+        "github.com/gin-gonic/gin"
+
+        "net/http"
+        "time"
+)
+
+const UserContextKey = "currentUser"
+
+func Auth(
+        repo repository.IUserRepository,
+        key entities.Secret,
+) gin.HandlerFunc <span class="cov10" title="4">{
+        return func(c *gin.Context) </span><span class="cov10" title="4">{
+                ctx := c.Request.Context()
+
+                token := c.Request.Header.Get("Authorization")
+                if token == "" </span><span class="cov1" title="1">{
+                        logging.LogInfoCtx(ctx, "auth: no token provided")
+                        c.Status(http.StatusUnauthorized)
+                        c.Abort()
+                        return
+                }</span>
+
+                <span class="cov8" title="3">login, ttl, err := jwt.ParseJWT(key, token)
+                if err != nil </span><span class="cov5" title="2">{
+                        logging.LogErrorCtx(ctx, err, "auth: jwt parsing err")
+                        c.Status(http.StatusUnauthorized)
+                        c.Abort()
+                        return
+                }</span>
+
+                <span class="cov1" title="1">if time.Now().After(ttl) </span><span class="cov0" title="0">{
+                        logging.LogInfoCtx(ctx, "auth: jwt token expired")
+                        c.Status(http.StatusUnauthorized)
+                        c.Abort()
+                        return
+                }</span>
+
+                <span class="cov1" title="1">user, err := repo.UserFindByLogin(ctx, login)
+                if err != nil </span><span class="cov0" title="0">{
+                        if err == storage.ErrRecordNotFound </span><span class="cov0" title="0">{
+                                logging.LogInfoCtx(ctx, "auth: login not found")
+                                c.Status(http.StatusUnauthorized)
+                        }</span> else<span class="cov0" title="0"> {
+                                logging.LogErrorCtx(ctx, err, "auth: middleware err")
+                                c.Status(http.StatusInternalServerError)
+                        }</span>
+
+                        <span class="cov0" title="0">c.Abort()
+                        return</span>
+                }
+
+                <span class="cov1" title="1">c.Set(UserContextKey, user)
+                c.Next()</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package middleware
+
+import (
+        "net/http"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/utils"
+        "github.com/gin-gonic/gin"
+        "github.com/rs/zerolog/log"
+)
+
+func RequestsLogger() gin.HandlerFunc <span class="cov0" title="0">{
+        return func(c *gin.Context) </span><span class="cov0" title="0">{
+                start := time.Now()
+                requestID := findOrCreateRequestID(c.Request)
+
+                // setup child logger for middleware
+                logger := log.Logger.With().
+                        Str("rid", requestID).
+                        Logger()
+
+                // log started
+                logger.Info().
+                        Str("method", c.Request.Method).
+                        Str("url", c.Request.URL.String()).
+                        Str("remote-addr", c.Request.RemoteAddr).
+                        Msg("Started")
+
+                logger.Debug().
+                        Msgf("request: %s", utils.HeadersToStr(c.Request.Header))
+
+                c.Writer.Header().Set("X-Request-Id", requestID)
+
+                ctx := logger.WithContext(c.Request.Context())
+                c.Request = c.Request.WithContext(ctx)
+
+                // execute
+                c.Next()
+
+                if headers := c.Writer.Header(); len(headers) &gt; 0 </span><span class="cov0" title="0">{
+                        logger.Debug().
+                                Msgf("response: %s", utils.HeadersToStr(headers))
+                }</span>
+
+                // log completed
+                <span class="cov0" title="0">logger.Info().
+                        Float64("elapsed", time.Since(start).Seconds()).
+                        Int("status", c.Writer.Status()).
+                        Msg("Completed")</span>
+        }
+}
+
+func findOrCreateRequestID(r *http.Request) string <span class="cov10" title="2">{
+        requestID := r.Header.Get("X-Request-Id")
+
+        if requestID == "" </span><span class="cov1" title="1">{
+                requestID = utils.GenerateRequestID()
+        }</span>
+
+        <span class="cov10" title="2">return requestID</span>
+}
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package repository
+
+import (
+        "context"
+        "errors"
+        "fmt"
+
+        "github.com/ex0rcist/gophermart/internal/domain"
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/jackc/pgx/v5"
+)
+
+type IOrderRepository interface {
+        OrderCreate(ctx context.Context, o domain.Order) (*domain.Order, error)
+        OrderFindByNumber(ctx context.Context, number string) (*domain.Order, error)
+        OrderList(ctx context.Context, userID domain.UserID) ([]*domain.Order, error)
+        OrderListForUpdate(ctx context.Context) ([]*domain.Order, error)
+        OrderUpdate(ctx context.Context, tx pgx.Tx, o domain.Order) error
+}
+
+type orderRepository struct {
+        pool storage.IPGXPool
+}
+
+func NewOrderRepository(pool storage.IPGXPool) IOrderRepository <span class="cov0" title="0">{
+        return &amp;orderRepository{pool: pool}
+}</span>
+
+func (repo *orderRepository) OrderCreate(ctx context.Context, order domain.Order) (*domain.Order, error) <span class="cov0" title="0">{
+        stmt := `INSERT INTO orders (user_id, number, status) VALUES ($1, $2, $3) RETURNING id, user_id, number, status, accrual, created_at, updated_at`
+
+        rows, err := repo.pool.Query(ctx, stmt, order.UserID, order.Number, order.Status)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("orderRepository -&gt; OrderCreate() error: %w", err)
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        newOrder := new(domain.Order)
+        for rows.Next() </span><span class="cov0" title="0">{
+                err = rows.Scan(
+                        &amp;newOrder.ID, &amp;newOrder.UserID, &amp;newOrder.Number, &amp;newOrder.Status,
+                        &amp;newOrder.Accrual, &amp;newOrder.CreatedAt, &amp;newOrder.UpdatedAt,
+                )
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("orderRepository -&gt; OrderCreate() error: %w", err)
+                }</span>
+        }
+
+        <span class="cov0" title="0">return newOrder, nil</span>
+}
+
+func (repo *orderRepository) OrderList(ctx context.Context, userID domain.UserID) ([]*domain.Order, error) <span class="cov0" title="0">{
+        stmt := `SELECT number, status, accrual, created_at FROM orders WHERE user_id = $1 ORDER BY created_at DESC`
+        orders := make([]*domain.Order, 0)
+
+        rows, err := repo.pool.Query(ctx, stmt, userID)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, pgx.ErrNoRows) </span><span class="cov0" title="0">{
+                        return nil, storage.ErrRecordNotFound
+                }</span>
+
+                <span class="cov0" title="0">return nil, fmt.Errorf("orderRepository -&gt; OrderList() error: %w", err)</span>
+        }
+        <span class="cov0" title="0">defer rows.Close()
+
+        for rows.Next() </span><span class="cov0" title="0">{
+                order := &amp;domain.Order{}
+                if err = rows.Scan(&amp;order.Number, &amp;order.Status, &amp;order.Accrual, &amp;order.CreatedAt); err != nil </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("orderRepository -&gt; OrderList() error: %w", err)
+                }</span>
+                <span class="cov0" title="0">orders = append(orders, order)</span>
+        }
+
+        <span class="cov0" title="0">return orders, nil</span>
+}
+
+func (repo *orderRepository) OrderFindByNumber(ctx context.Context, number string) (*domain.Order, error) <span class="cov0" title="0">{
+        stmt := `SELECT id, user_id, number, status, accrual, created_at, updated_at FROM orders WHERE number = $1`
+        order := new(domain.Order)
+
+        err := repo.pool.QueryRow(ctx, stmt, number).Scan(
+                &amp;order.ID, &amp;order.UserID, &amp;order.Number, &amp;order.Status,
+                &amp;order.Accrual, &amp;order.CreatedAt, &amp;order.UpdatedAt,
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, pgx.ErrNoRows) </span><span class="cov0" title="0">{
+                        return nil, storage.ErrRecordNotFound
+                }</span>
+                <span class="cov0" title="0">return nil, fmt.Errorf("orderRepository -&gt; OrderFindByNumber() error: %w", err)</span>
+        }
+
+        <span class="cov0" title="0">return order, nil</span>
+}
+
+func (repo *orderRepository) OrderListForUpdate(ctx context.Context) ([]*domain.Order, error) <span class="cov0" title="0">{
+        stmt := `SELECT id, user_id, number, status, created_at FROM orders WHERE status IN ('NEW', 'PROCESSING');`
+        orders := make([]*domain.Order, 0)
+
+        rows, err := repo.pool.Query(ctx, stmt)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, pgx.ErrNoRows) </span><span class="cov0" title="0">{
+                        return nil, storage.ErrRecordNotFound
+                }</span>
+                <span class="cov0" title="0">return nil, err</span>
+        }
+
+        <span class="cov0" title="0">for rows.Next() </span><span class="cov0" title="0">{
+                order := &amp;domain.Order{}
+                if err = rows.Scan(&amp;order.ID, &amp;order.UserID, &amp;order.Number, &amp;order.Status, &amp;order.CreatedAt); err != nil </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("orderRepository -&gt; OrderListForUpdate() error: %w", err)
+                }</span>
+                <span class="cov0" title="0">orders = append(orders, order)</span>
+        }
+
+        <span class="cov0" title="0">err = rows.Err()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("orderRepository -&gt; OrderListForUpdate() error: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return orders, nil</span>
+}
+
+func (repo *orderRepository) OrderUpdate(ctx context.Context, tx pgx.Tx, order domain.Order) error <span class="cov0" title="0">{
+        stmt := `UPDATE orders SET status = $1, accrual = $2 WHERE id = $3`
+
+        var err error
+        if tx != nil </span><span class="cov0" title="0">{
+                _, err = tx.Exec(ctx, stmt, order.Status, order.Accrual, order.ID)
+        }</span> else<span class="cov0" title="0"> {
+                _, err = repo.pool.Exec(ctx, stmt, order.Status, order.Accrual, order.ID)
+        }</span>
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("orderRepository -&gt; OrderUpdate() error: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package repository
+
+import (
+        "context"
+        "errors"
+        "fmt"
+
+        "github.com/ex0rcist/gophermart/internal/domain"
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/jackc/pgx/v5"
+        "github.com/shopspring/decimal"
+)
+
+type IUserRepository interface {
+        UserCreate(ctx context.Context, login string, password string) (*domain.User, error)
+        UserFindByLogin(ctx context.Context, login string) (*domain.User, error)
+        UserGetBalance(ctx context.Context, tx pgx.Tx, id domain.UserID) (*decimal.Decimal, *decimal.Decimal, error)
+        UserUpdateBalanceAndWithdrawals(ctx context.Context, tx pgx.Tx, id domain.UserID) error
+}
+
+type userRepository struct {
+        pool storage.IPGXPool
+}
+
+func NewUserRepository(pool storage.IPGXPool) IUserRepository <span class="cov0" title="0">{
+        return &amp;userRepository{pool: pool}
+}</span>
+
+func (repo *userRepository) UserCreate(ctx context.Context, login string, password string) (*domain.User, error) <span class="cov0" title="0">{
+        stmt := `INSERT INTO users (login, password) VALUES ($1, $2) RETURNING id, login, balance, created_at, updated_at`
+
+        rows, err := repo.pool.Query(ctx, stmt, login, password)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        user := new(domain.User)
+        for rows.Next() </span><span class="cov0" title="0">{
+                err = rows.Scan(&amp;user.ID, &amp;user.Login, &amp;user.Balance, &amp;user.CreatedAt, &amp;user.UpdatedAt)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+        }
+
+        <span class="cov0" title="0">if err = rows.Err(); err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("userRepository -&gt; UserCreate() error: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return user, nil</span>
+}
+
+func (repo *userRepository) UserFindByLogin(ctx context.Context, login string) (*domain.User, error) <span class="cov0" title="0">{
+        stmt := `SELECT id, login, password, balance, created_at, updated_at FROM users WHERE login = $1`
+        user := new(domain.User)
+
+        err := repo.pool.QueryRow(ctx, stmt, login).Scan(
+                &amp;user.ID, &amp;user.Login, &amp;user.Password,
+                &amp;user.Balance, &amp;user.CreatedAt, &amp;user.UpdatedAt,
+        )
+
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, pgx.ErrNoRows) </span><span class="cov0" title="0">{
+                        return nil, storage.ErrRecordNotFound
+                }</span>
+                <span class="cov0" title="0">return nil, fmt.Errorf("userRepository -&gt; UserFindByLogin() error: %w", err)</span>
+        }
+
+        <span class="cov0" title="0">return user, nil</span>
+}
+
+func (repo *userRepository) UserGetBalance(ctx context.Context, tx pgx.Tx, id domain.UserID) (*decimal.Decimal, *decimal.Decimal, error) <span class="cov0" title="0">{
+        stmt := `SELECT balance, withdrawn FROM users WHERE id = $1 FOR UPDATE`
+
+        var row pgx.Row
+        if tx != nil </span><span class="cov0" title="0">{
+                row = tx.QueryRow(ctx, stmt, id)
+        }</span> else<span class="cov0" title="0"> {
+                row = repo.pool.QueryRow(ctx, stmt, id)
+        }</span>
+
+        <span class="cov0" title="0">var b, w decimal.Decimal
+        err := row.Scan(&amp;b, &amp;w)
+
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, pgx.ErrNoRows) </span><span class="cov0" title="0">{
+                        return nil, nil, storage.ErrRecordNotFound
+                }</span>
+                <span class="cov0" title="0">return nil, nil, fmt.Errorf("userRepository -&gt; UserGetBalance() error: %w", err)</span>
+        }
+
+        <span class="cov0" title="0">return &amp;b, &amp;w, nil</span>
+}
+
+func (repo *userRepository) UserUpdateBalanceAndWithdrawals(ctx context.Context, tx pgx.Tx, id domain.UserID) error <span class="cov0" title="0">{
+        stmt := `
+        WITH
+            accruals AS (        
+                        SELECT o.user_id, COALESCE(SUM(o.accrual), 0) AS total_accrual
+                FROM orders o
+                WHERE o.status = 'PROCESSED'
+                GROUP BY o.user_id),
+            withdrawals AS (
+                SELECT w.user_id, COALESCE(SUM(w.amount), 0) AS total_withdrawn
+                FROM withdrawals w       
+                GROUP BY w.user_id)
+        UPDATE users u
+        SET
+            balance = COALESCE(a.total_accrual, 0) - COALESCE(w.total_withdrawn, 0),
+            withdrawn = COALESCE(w.total_withdrawn, 0)
+        FROM
+            accruals a
+    LEFT JOIN 
+                withdrawals w ON a.user_id = w.user_id
+        WHERE
+            u.id = $1 AND a.user_id = $1`
+
+        var err error
+        if tx != nil </span><span class="cov0" title="0">{
+                _, err = tx.Exec(ctx, stmt, id)
+        }</span> else<span class="cov0" title="0"> {
+                _, err = repo.pool.Exec(ctx, stmt, id)
+        }</span>
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("userRepository -&gt; UserUpdateBalanceAndWithdrawals() error: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package repository
+
+import (
+        "context"
+        "errors"
+        "fmt"
+
+        "github.com/ex0rcist/gophermart/internal/domain"
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/jackc/pgx/v5"
+)
+
+type IWithdrawalRepository interface {
+        WithdrawalCreate(ctx context.Context, tx pgx.Tx, w domain.Withdrawal) error
+        WithdrawalList(ctx context.Context, userID domain.UserID) ([]*domain.Withdrawal, error)
+}
+
+type withdrawalRepository struct {
+        pool storage.IPGXPool
+}
+
+func NewWithdrawalRepository(pool storage.IPGXPool) IWithdrawalRepository <span class="cov0" title="0">{
+        return &amp;withdrawalRepository{pool: pool}
+}</span>
+
+func (repo *withdrawalRepository) WithdrawalCreate(ctx context.Context, tx pgx.Tx, w domain.Withdrawal) error <span class="cov0" title="0">{
+        stmt := `INSERT INTO withdrawals (user_id, order_number, amount) VALUES ($1, $2, $3)`
+
+        var err error
+        if tx != nil </span><span class="cov0" title="0">{
+                _, err = tx.Exec(ctx, stmt, w.UserID, w.OrderNumber, w.Amount)
+        }</span> else<span class="cov0" title="0"> {
+                _, err = repo.pool.Exec(ctx, stmt, w.UserID, w.OrderNumber, w.Amount)
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("withdrawalRepository -&gt; WithdrawalCreate() error: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (repo *withdrawalRepository) WithdrawalList(ctx context.Context, userID domain.UserID) ([]*domain.Withdrawal, error) <span class="cov0" title="0">{
+        stmt := `SELECT order_number, amount, created_at FROM withdrawals WHERE user_id = $1 ORDER BY created_at DESC`
+        wds := make([]*domain.Withdrawal, 0)
+
+        rows, err := repo.pool.Query(ctx, stmt, userID)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, pgx.ErrNoRows) </span><span class="cov0" title="0">{
+                        return nil, storage.ErrRecordNotFound
+                }</span>
+
+                <span class="cov0" title="0">return nil, fmt.Errorf("withdrawalRepository -&gt; WithdrawalList() error: %w", err)</span>
+        }
+        <span class="cov0" title="0">defer rows.Close()
+
+        for rows.Next() </span><span class="cov0" title="0">{
+                wd := &amp;domain.Withdrawal{}
+                if err = rows.Scan(&amp;wd.OrderNumber, &amp;wd.Amount, &amp;wd.CreatedAt); err != nil </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("withdrawalRepository -&gt; WithdrawalList() error: %w", err)
+                }</span>
+                <span class="cov0" title="0">wds = append(wds, wd)</span>
+        }
+
+        <span class="cov0" title="0">return wds, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">package storage
+
+import (
+        "context"
+        "errors"
+        "fmt"
+
+        "github.com/ex0rcist/gophermart/internal/config"
+        "github.com/ex0rcist/gophermart/internal/logging"
+        "github.com/ex0rcist/gophermart/internal/storage/tracer"
+        "github.com/golang-migrate/migrate/v4"
+        "github.com/jackc/pgx/v5/pgxpool"
+
+        _ "github.com/golang-migrate/migrate/v4/database/postgres"
+        _ "github.com/golang-migrate/migrate/v4/source/file"
+)
+
+var ErrRecordNotFound = errors.New("record not found")
+var _ IPGXStorage = (*PGXStorage)(nil)
+
+type IPGXStorage interface {
+        GetPool() IPGXPool
+        Close()
+}
+
+type PGXStorage struct {
+        pool IPGXPool
+}
+
+func NewPGXStorage(config config.DB, pool IPGXPool, migrate bool) (IPGXStorage, error) <span class="cov0" title="0">{
+        var err error
+
+        if migrate </span><span class="cov0" title="0">{
+                if err := runMigrations(config); err != nil </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("runMigrations() failed: %w", err)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if pool == nil </span><span class="cov0" title="0">{
+                pool, err = createPool(context.Background(), config)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("create pool failed: %w", err)
+                }</span>
+        }
+
+        <span class="cov0" title="0">return &amp;PGXStorage{pool: pool}, err</span>
+}
+
+func (s *PGXStorage) GetPool() IPGXPool <span class="cov0" title="0">{
+        return s.pool
+}</span>
+
+func (s *PGXStorage) Close() <span class="cov0" title="0">{
+        s.pool.Close()
+}</span>
+
+func createPool(ctx context.Context, config config.DB) (*pgxpool.Pool, error) <span class="cov0" title="0">{
+        pgxConfig, err := pgxpool.ParseConfig(config.DSN)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("pgxpool parse config failed: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">pgxConfig.ConnConfig.Tracer = tracer.NewDBQueryTracer()
+
+        pool, err := pgxpool.NewWithConfig(ctx, pgxConfig)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("pgxpool init failed: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">err = pool.Ping(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("db connect failed: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">return pool, nil</span>
+}
+
+func runMigrations(config config.DB) error <span class="cov0" title="0">{
+        migrator, err := migrate.New(config.MigrationsSource, config.DSN)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("migrate.New() failed: %w", err)
+        }</span>
+
+        <span class="cov0" title="0">err = migrator.Up()
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, migrate.ErrNoChange) </span><span class="cov0" title="0">{
+                        logging.LogInfo("migrations: no change")
+                        return nil
+                }</span>
+                <span class="cov0" title="0">return fmt.Errorf("migrations failed: %w", err)</span>
+        }
+
+        <span class="cov0" title="0">defer func() </span><span class="cov0" title="0">{
+                srcErr, dbErr := migrator.Close()
+                if srcErr != nil </span><span class="cov0" title="0">{
+                        logging.LogError(srcErr, "failed closing migrator", srcErr.Error())
+                }</span>
+                <span class="cov0" title="0">if dbErr != nil </span><span class="cov0" title="0">{
+                        logging.LogError(dbErr, "failed closing migrator", dbErr.Error())
+                }</span>
+        }()
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file28" style="display: none">package tracer
+
+import (
+        "context"
+        "fmt"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/logging"
+        "github.com/jackc/pgx/v5"
+)
+
+const (
+        queryStartTimeKey contextKey = "queryStartTime"
+        sqlQueryKey       contextKey = "sqlQuery"
+)
+
+type contextKey string
+
+type DBQueryTracer struct {
+        logFunc func(ctx context.Context, sqlQuery any, duration time.Duration)
+}
+
+func NewDBQueryTracer() *DBQueryTracer <span class="cov10" title="2">{
+        return &amp;DBQueryTracer{logFunc: defaultLogFunc}
+}</span>
+
+func (tracer *DBQueryTracer) TraceQueryStart(ctx context.Context, _ *pgx.Conn, data pgx.TraceQueryStartData) context.Context <span class="cov1" title="1">{
+        ctx = context.WithValue(ctx, queryStartTimeKey, time.Now())
+        ctx = context.WithValue(ctx, sqlQueryKey, data.SQL)
+
+        return ctx
+}</span>
+
+func (tracer *DBQueryTracer) TraceQueryEnd(ctx context.Context, conn *pgx.Conn, data pgx.TraceQueryEndData) <span class="cov1" title="1">{
+        startTime, ok := ctx.Value(queryStartTimeKey).(time.Time)
+        if !ok </span><span class="cov0" title="0">{
+                startTime = time.Now()
+        }</span>
+
+        <span class="cov1" title="1">duration := time.Since(startTime)
+        sqlQuery := ctx.Value(sqlQueryKey)
+
+        tracer.logFunc(ctx, sqlQuery, duration)</span>
+}
+
+func defaultLogFunc(ctx context.Context, sqlQuery any, duration time.Duration) <span class="cov0" title="0">{
+        logging.LogInfoCtx(ctx, fmt.Sprintf("pgx: queried \"%s\" in %v", sqlQuery, duration))
+}</span>
+</pre>
+		
+		<pre class="file" id="file29" style="display: none">package usecase
+
+import (
+        "context"
+        "errors"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/domain"
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/ex0rcist/gophermart/internal/storage/repository"
+        "github.com/ex0rcist/gophermart/internal/utils"
+)
+
+var ErrOrderNotFound = errors.New("order not found")
+var ErrOrderAlreadyRegistered = errors.New("order already registered")
+var ErrOrderConflict = errors.New("order number already registered by another user")
+var ErrInvalidOrderNumber = errors.New("invalid order number")
+
+type IOrderCreateUsecase interface {
+        Create(ctx context.Context, user *domain.User, number string) (*domain.Order, error)
+        OrderFindByNumber(ctx context.Context, number string) (*domain.Order, error)
+}
+
+type orderCreateUsecase struct {
+        storage        storage.IPGXStorage
+        repo           repository.IOrderRepository
+        contextTimeout time.Duration
+}
+
+func NewOrderCreateUsecase(storage storage.IPGXStorage, repo repository.IOrderRepository, timeout time.Duration) IOrderCreateUsecase <span class="cov10" title="6">{
+        return &amp;orderCreateUsecase{storage: storage, repo: repo, contextTimeout: timeout}
+}</span>
+
+func (uc *orderCreateUsecase) Create(ctx context.Context, user *domain.User, number string) (*domain.Order, error) <span class="cov7" title="4">{
+        tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+        defer cancel()
+
+        // валидируем номер заказа
+        if !utils.LuhnCheck(number) </span><span class="cov1" title="1">{
+                return nil, ErrInvalidOrderNumber
+        }</span>
+
+        // ищем заказ по номеру
+        <span class="cov6" title="3">existingOrder, err := uc.OrderFindByNumber(tCtx, number)
+        if err != nil &amp;&amp; err != ErrOrderNotFound </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        // проверяем существующий заказ
+        <span class="cov6" title="3">if existingOrder != nil </span><span class="cov4" title="2">{
+                if existingOrder.UserID == user.ID </span><span class="cov1" title="1">{
+                        return nil, ErrOrderAlreadyRegistered
+                }</span>
+
+                <span class="cov1" title="1">return nil, ErrOrderConflict</span>
+        }
+
+        <span class="cov1" title="1">order, err := uc.repo.OrderCreate(ctx, domain.Order{UserID: user.ID, Number: number, Status: domain.OrderStatusNew})
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">return order, nil</span>
+}
+
+func (uc *orderCreateUsecase) OrderFindByNumber(ctx context.Context, number string) (*domain.Order, error) <span class="cov9" title="5">{
+        tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+        defer cancel()
+
+        order, err := uc.repo.OrderFindByNumber(tCtx, number)
+
+        if err != nil </span><span class="cov4" title="2">{
+                if err == storage.ErrRecordNotFound </span><span class="cov1" title="1">{
+                        return nil, ErrOrderNotFound
+                }</span>
+
+                <span class="cov1" title="1">return nil, err</span>
+        }
+
+        <span class="cov6" title="3">return order, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file30" style="display: none">package usecase
+
+import (
+        "context"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/domain"
+        "github.com/ex0rcist/gophermart/internal/entities"
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/ex0rcist/gophermart/internal/storage/repository"
+)
+
+type IOrderListUsecase interface {
+        Call(ctx context.Context, user *domain.User) ([]*OrderListResult, error)
+}
+
+type orderListUsecase struct {
+        storage        storage.IPGXStorage
+        repo           repository.IOrderRepository
+        contextTimeout time.Duration
+}
+
+type OrderListResult struct {
+        Number    string               `json:"number"`
+        Status    domain.OrderStatus   `json:"status"`
+        Accrual   *entities.GDecimal   `json:"accrual,omitempty"` // без использования указателя omitempty не считает значение пустым
+        CreatedAt entities.RFC3339Time `json:"uploaded_at"`
+}
+
+func NewOrderListUsecase(storage storage.IPGXStorage, repo repository.IOrderRepository, timeout time.Duration) IOrderListUsecase <span class="cov10" title="3">{
+        return &amp;orderListUsecase{storage: storage, repo: repo, contextTimeout: timeout}
+}</span>
+
+func (uc *orderListUsecase) Call(ctx context.Context, user *domain.User) ([]*OrderListResult, error) <span class="cov10" title="3">{
+        tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+        defer cancel()
+
+        orders, err := uc.repo.OrderList(tCtx, user.ID)
+        if err != nil </span><span class="cov6" title="2">{
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">result := make([]*OrderListResult, 0)
+        for _, o := range orders </span><span class="cov6" title="2">{
+                el := OrderListResult{Number: o.Number, Status: o.Status, CreatedAt: entities.RFC3339Time(o.CreatedAt)}
+
+                if o.Status == domain.OrderStatusProcessed </span><span class="cov1" title="1">{
+                        val := entities.GDecimal(o.Accrual)
+                        el.Accrual = &amp;val
+                }</span>
+
+                <span class="cov6" title="2">result = append(result, &amp;el)</span>
+        }
+
+        <span class="cov1" title="1">return result, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file31" style="display: none">package usecase
+
+import (
+        "context"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/domain"
+        "github.com/ex0rcist/gophermart/internal/entities"
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/ex0rcist/gophermart/internal/storage/repository"
+)
+
+type IGetUserBalanceUsecase interface {
+        Call(ctx context.Context, user *domain.User) (*GetUserBalanceResult, error)
+}
+
+type GetUserBalanceResult struct {
+        Current   entities.GDecimal `json:"current"`
+        Withdrawn entities.GDecimal `json:"withdrawn"`
+}
+
+type getUserBalanceUsecase struct {
+        storage        storage.IPGXStorage
+        repo           repository.IUserRepository
+        contextTimeout time.Duration
+}
+
+func NewGetUserBalanceUsecase(storage storage.IPGXStorage, repo repository.IUserRepository, timeout time.Duration) IGetUserBalanceUsecase <span class="cov10" title="3">{
+        return &amp;getUserBalanceUsecase{storage: storage, repo: repo, contextTimeout: timeout}
+}</span>
+
+func (uc *getUserBalanceUsecase) Call(ctx context.Context, user *domain.User) (*GetUserBalanceResult, error) <span class="cov10" title="3">{
+        tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+        defer cancel()
+
+        b, w, err := uc.repo.UserGetBalance(tCtx, nil, user.ID)
+        if err != nil </span><span class="cov6" title="2">{
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">result := &amp;GetUserBalanceResult{
+                Current:   entities.GDecimal(*b),
+                Withdrawn: entities.GDecimal(*w),
+        }
+
+        return result, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file32" style="display: none">package usecase
+
+import (
+        "context"
+        "errors"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/domain"
+        "github.com/ex0rcist/gophermart/internal/entities"
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/ex0rcist/gophermart/internal/storage/repository"
+        "github.com/ex0rcist/gophermart/internal/utils"
+        "github.com/ex0rcist/gophermart/pkg/jwt"
+)
+
+var ErrInvalidLoginOrPassword = errors.New("invalid login or password")
+
+type ILoginUsecase interface {
+        Call(ctx context.Context, form LoginRequest) (string, error)
+        GetUserByLogin(ctx context.Context, req LoginRequest) (*domain.User, error)
+        ComparePassword(user *domain.User, password string) error
+        CreateAccessToken(user *domain.User, secret entities.Secret, lifetime time.Duration) (string, error)
+}
+
+type LoginRequest struct {
+        Login    string `json:"login" binding:"required,min=3"`
+        Password string `json:"password" binding:"required,min=3"`
+}
+
+type loginUsecase struct {
+        storage        storage.IPGXStorage
+        repo           repository.IUserRepository
+        secret         entities.Secret
+        contextTimeout time.Duration
+}
+
+func NewLoginUsecase(storage storage.IPGXStorage, repo repository.IUserRepository, secret entities.Secret, timeout time.Duration) ILoginUsecase <span class="cov10" title="7">{
+        return &amp;loginUsecase{storage: storage, repo: repo, secret: secret, contextTimeout: timeout}
+}</span>
+
+func (uc *loginUsecase) Call(ctx context.Context, form LoginRequest) (string, error) <span class="cov4" title="2">{
+        // находим пользователя
+        user, err := uc.GetUserByLogin(ctx, form)
+        if err != nil </span><span class="cov1" title="1">{
+                return "", err
+        }</span>
+
+        // создаем JWT токен
+        <span class="cov1" title="1">token, err := uc.CreateAccessToken(user, uc.secret, jwt.LoginTokenLifetime)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov1" title="1">return token, nil</span>
+}
+
+func (uc *loginUsecase) GetUserByLogin(ctx context.Context, req LoginRequest) (*domain.User, error) <span class="cov7" title="4">{
+        tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+        defer cancel()
+
+        user, err := uc.repo.UserFindByLogin(tCtx, req.Login)
+        if err != nil </span><span class="cov4" title="2">{
+                if err == storage.ErrRecordNotFound </span><span class="cov4" title="2">{
+                        return nil, ErrInvalidLoginOrPassword
+                }</span>
+
+                <span class="cov0" title="0">return nil, err</span>
+        }
+
+        <span class="cov4" title="2">return user, nil</span>
+}
+
+func (uc *loginUsecase) ComparePassword(user *domain.User, password string) error <span class="cov4" title="2">{
+        return utils.ComparePassword(user.Password, password)
+}</span>
+
+func (uc *loginUsecase) CreateAccessToken(user *domain.User, secret entities.Secret, lifetime time.Duration) (string, error) <span class="cov4" title="2">{
+        token, err := jwt.CreateJWT(secret, user.Login, lifetime)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov4" title="2">return token, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file33" style="display: none">package usecase
+
+import (
+        "context"
+        "errors"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/domain"
+        "github.com/ex0rcist/gophermart/internal/entities"
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/ex0rcist/gophermart/internal/storage/repository"
+        "github.com/ex0rcist/gophermart/internal/utils"
+        "github.com/ex0rcist/gophermart/pkg/jwt"
+)
+
+var ErrUserAlreadyExists = errors.New("login already exists")
+
+type IRegisterUsecase interface {
+        Call(ctx context.Context, form RegisterRequest) (string, error)
+        GetUserByLogin(ctx context.Context, form RegisterRequest) (*domain.User, error)
+        CreateUser(ctx context.Context, login string, password string) (*domain.User, error)
+        CreateAccessToken(user *domain.User, secret entities.Secret, lifetime time.Duration) (string, error)
+}
+
+type registerUsecase struct {
+        storage        storage.IPGXStorage
+        repo           repository.IUserRepository
+        secret         entities.Secret
+        contextTimeout time.Duration
+}
+type RegisterRequest struct {
+        Login    string `json:"login" binding:"required,min=3"`
+        Password string `json:"password" binding:"required,min=3"`
+}
+
+func NewRegisterUsecase(storage storage.IPGXStorage, repo repository.IUserRepository, secret entities.Secret, timeout time.Duration) IRegisterUsecase <span class="cov10" title="6">{
+        return &amp;registerUsecase{storage: storage, repo: repo, secret: secret, contextTimeout: timeout}
+}</span>
+
+func (uc *registerUsecase) Call(ctx context.Context, form RegisterRequest) (string, error) <span class="cov4" title="2">{
+        // находим пользователя
+        existingUser, err := uc.GetUserByLogin(ctx, form)
+        if err != nil &amp;&amp; err != storage.ErrRecordNotFound </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+        <span class="cov4" title="2">if existingUser != nil </span><span class="cov1" title="1">{
+                return "", ErrUserAlreadyExists
+        }</span>
+
+        // генерируем пароль
+        <span class="cov1" title="1">form.Password, err = utils.HashPassword(form.Password)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        // создаем пользователя
+        <span class="cov1" title="1">newUser, err := uc.CreateUser(ctx, form.Login, form.Password)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        // создаем JWT токен
+        <span class="cov1" title="1">token, err := uc.CreateAccessToken(newUser, uc.secret, jwt.LoginTokenLifetime)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov1" title="1">return token, nil</span>
+}
+
+func (uc *registerUsecase) GetUserByLogin(ctx context.Context, req RegisterRequest) (*domain.User, error) <span class="cov7" title="4">{
+        tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+        defer cancel()
+
+        return uc.repo.UserFindByLogin(tCtx, req.Login)
+}</span>
+
+func (uc *registerUsecase) CreateUser(ctx context.Context, login string, password string) (*domain.User, error) <span class="cov4" title="2">{
+        tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+        defer cancel()
+
+        return uc.repo.UserCreate(tCtx, login, password)
+}</span>
+
+func (uc *registerUsecase) CreateAccessToken(user *domain.User, secret entities.Secret, lifetime time.Duration) (string, error) <span class="cov4" title="2">{
+        token, err := jwt.CreateJWT(secret, user.Login, lifetime)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov4" title="2">return token, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file34" style="display: none">package usecase
+
+import (
+        "context"
+        "errors"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/domain"
+        "github.com/ex0rcist/gophermart/internal/logging"
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/ex0rcist/gophermart/internal/storage/repository"
+        "github.com/ex0rcist/gophermart/internal/utils"
+        "github.com/jackc/pgx/v5"
+        "github.com/shopspring/decimal"
+)
+
+var ErrInsufficientUserBalance = errors.New("insufficient user balance")
+
+type WithdrawBalanceRequest struct {
+        OrderNumber string          `json:"order" binding:"required,luhn"`
+        Amount      decimal.Decimal `json:"sum" binding:"required"`
+}
+
+type IWithdrawBalanceUsecase interface {
+        Call(ctx context.Context, user *domain.User, req WithdrawBalanceRequest) error
+}
+
+type withdrawBalanceUsecase struct {
+        storage        storage.IPGXStorage
+        userRepo       repository.IUserRepository
+        wdrwRepo       repository.IWithdrawalRepository
+        contextTimeout time.Duration
+}
+
+func NewWithdrawBalanceUsecase(
+        storage storage.IPGXStorage,
+        userRepo repository.IUserRepository,
+        wdrwRepo repository.IWithdrawalRepository,
+        timeout time.Duration,
+) IWithdrawBalanceUsecase <span class="cov10" title="5">{
+        return &amp;withdrawBalanceUsecase{storage: storage, userRepo: userRepo, wdrwRepo: wdrwRepo, contextTimeout: timeout}
+}</span>
+
+func (uc *withdrawBalanceUsecase) Call(ctx context.Context, user *domain.User, form WithdrawBalanceRequest) error <span class="cov10" title="5">{
+        tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+        defer cancel()
+
+        // валидируем номер заказа
+        if !utils.LuhnCheck(form.OrderNumber) </span><span class="cov1" title="1">{
+                return ErrInvalidOrderNumber
+        }</span>
+
+        // стартуем транзакцию
+        <span class="cov8" title="4">tx, err := uc.storage.GetPool().Begin(ctx)
+        if err != nil </span><span class="cov1" title="1">{
+                logging.LogErrorCtx(ctx, err, "withdrawBalanceUsecase(): error starting tx")
+                return err
+        }</span>
+        <span class="cov7" title="3">defer func() </span><span class="cov7" title="3">{
+                err := tx.Rollback(ctx)
+                if err != nil &amp;&amp; !errors.Is(err, pgx.ErrTxClosed) </span><span class="cov0" title="0">{
+                        logging.LogErrorCtx(ctx, err, "withdrawBalanceUsecase(): error rolling tx back")
+                }</span>
+        }()
+
+        // получаем активный баланс, транзакция блокирует user.balance и user.withdrawn
+        <span class="cov7" title="3">b, _, err := uc.userRepo.UserGetBalance(tCtx, tx, user.ID)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        // убеждаемся что баланса достаточно
+        <span class="cov7" title="3">if b.Cmp(form.Amount) == -1 </span><span class="cov1" title="1">{
+                return ErrInsufficientUserBalance
+        }</span>
+
+        // создаем списание
+        <span class="cov4" title="2">err = uc.wdrwRepo.WithdrawalCreate(tCtx, tx, domain.Withdrawal{UserID: user.ID, OrderNumber: form.OrderNumber, Amount: form.Amount})
+        if err != nil </span><span class="cov0" title="0">{
+                logging.LogErrorCtx(ctx, err, "UserWithdrawBalance(): error creating withdrawal")
+                return err
+        }</span>
+
+        // актуализируем user.balance и user.withdrawn
+        <span class="cov4" title="2">err = uc.userRepo.UserUpdateBalanceAndWithdrawals(ctx, tx, user.ID)
+        if err != nil </span><span class="cov0" title="0">{
+                logging.LogErrorCtx(ctx, err, "UserWithdrawBalance(): error recalculating balance/withdrawn")
+                return err
+        }</span>
+
+        // завершаем транзакцию
+        <span class="cov4" title="2">err = tx.Commit(ctx)
+        if err != nil </span><span class="cov1" title="1">{
+                logging.LogErrorCtx(ctx, err, "UserWithdrawBalance(): error commiting tx")
+                return err
+        }</span>
+
+        <span class="cov1" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file35" style="display: none">package usecase
+
+import (
+        "context"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/domain"
+        "github.com/ex0rcist/gophermart/internal/entities"
+        "github.com/ex0rcist/gophermart/internal/storage"
+        "github.com/ex0rcist/gophermart/internal/storage/repository"
+)
+
+type IWithdrawalListUsecase interface {
+        Call(ctx context.Context, user *domain.User) ([]*WithdrawalListResult, error)
+}
+
+type WithdrawalListResult struct {
+        OrderNumber string               `json:"order"`
+        Amount      entities.GDecimal    `json:"sum"`
+        CreatedAt   entities.RFC3339Time `json:"processed_at"`
+}
+
+type withdrawalListUsecase struct {
+        storage        storage.IPGXStorage
+        repo           repository.IWithdrawalRepository
+        contextTimeout time.Duration
+}
+
+func NewWithdrawalListUsecase(storage storage.IPGXStorage, repo repository.IWithdrawalRepository, timeout time.Duration) IWithdrawalListUsecase <span class="cov10" title="4">{
+        return &amp;withdrawalListUsecase{storage: storage, repo: repo, contextTimeout: timeout}
+}</span>
+
+func (uc *withdrawalListUsecase) Call(ctx context.Context, u *domain.User) ([]*WithdrawalListResult, error) <span class="cov10" title="4">{
+        tCtx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+        defer cancel()
+
+        wds, err := uc.repo.WithdrawalList(tCtx, u.ID)
+        if err != nil </span><span class="cov5" title="2">{
+                return nil, err
+        }</span>
+
+        <span class="cov5" title="2">result := make([]*WithdrawalListResult, 0)
+        for _, w := range wds </span><span class="cov5" title="2">{
+                el := WithdrawalListResult{
+                        OrderNumber: w.OrderNumber,
+                        Amount:      entities.GDecimal(w.Amount),
+                        CreatedAt:   entities.RFC3339Time(w.CreatedAt),
+                }
+                result = append(result, &amp;el)
+        }</span>
+
+        <span class="cov5" title="2">return result, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file36" style="display: none">package utils
+
+import (
+        "fmt"
+        "net/http"
+        "sort"
+        "strings"
+)
+
+func HeadersToStr(headers http.Header) string <span class="cov8" title="4">{
+        stringsSlice := []string{}
+
+        for name, values := range headers </span><span class="cov8" title="4">{
+                for _, value := range values </span><span class="cov10" title="5">{
+                        stringsSlice = append(stringsSlice, fmt.Sprintf("%s:%s", name, value))
+                }</span>
+        }
+
+        <span class="cov8" title="4">sort.Slice(stringsSlice, func(i, j int) bool </span><span class="cov4" title="2">{
+                return stringsSlice[i] &lt; stringsSlice[j]
+        }</span>)
+
+        <span class="cov8" title="4">return strings.Join(stringsSlice, ", ")</span>
+}
+</pre>
+		
+		<pre class="file" id="file37" style="display: none">package utils
+
+func LuhnCheck(number string) bool <span class="cov6" title="11">{
+        sum, length := 0, len(number)
+        if length &lt; 2 </span><span class="cov2" title="2">{
+                return false
+        }</span>
+        <span class="cov5" title="9">for index, num := range number </span><span class="cov10" title="68">{
+                dig := int(num - '0')
+                if length%2 == index%2 </span><span class="cov8" title="31">{
+                        dig *= 2
+                        if dig &gt; 9 </span><span class="cov6" title="14">{
+                                dig = dig%10 + dig/10
+                        }</span>
+                }
+                <span class="cov10" title="68">sum += dig</span>
+        }
+        <span class="cov5" title="9">return sum%10 == 0</span>
+}
+</pre>
+		
+		<pre class="file" id="file38" style="display: none">package utils
+
+import (
+        uuid "github.com/satori/go.uuid"
+)
+
+func GenerateRequestID() string <span class="cov8" title="1">{
+        return uuid.NewV4().String()
+}</span>
+</pre>
+		
+		<pre class="file" id="file39" style="display: none">package retrier
+
+import (
+        "fmt"
+        "time"
+
+        "github.com/avast/retry-go"
+        "github.com/ex0rcist/gophermart/internal/logging"
+)
+
+type Retrier struct {
+        payloadFn retry.RetryableFunc
+        retryIfFn retry.RetryIfFunc
+        delays    []time.Duration
+}
+
+var _ error = (*RetriableError)(nil)
+
+type RetriableError struct {
+        Err        error
+        RetryAfter time.Duration
+}
+
+func (e RetriableError) Error() string <span class="cov0" title="0">{
+        return fmt.Sprintf("%s (retry after %v)", e.Err.Error(), e.RetryAfter)
+}</span>
+
+func (r Retrier) Run() error <span class="cov8" title="3">{
+        return retry.Do(
+                r.payloadFn,
+                retry.RetryIf(r.retryIfFn),
+                retry.DelayType(func(n uint, err error, config *retry.Config) time.Duration </span><span class="cov10" title="4">{
+                        logging.LogWarnF("will retry after %v", r.delays[n])
+                        return r.delays[n]
+                }</span>),
+                retry.Attempts(uint(len(r.delays))+1),
+        )
+}
+
+func NewRetrier(payloadFn func() error, retryIfFn func(err error) bool, delays []time.Duration) Retrier <span class="cov8" title="3">{
+        return Retrier{
+                payloadFn: payloadFn,
+                retryIfFn: retryIfFn,
+                delays:    delays,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file40" style="display: none">package utils
+
+import (
+        "crypto/rand"
+        "encoding/base64"
+
+        "golang.org/x/crypto/bcrypt"
+)
+
+func GenerateRandomString(length int) string <span class="cov1" title="1">{
+        b := make([]byte, length)
+        _, err := rand.Read(b)
+        if err != nil </span><span class="cov0" title="0">{
+                panic(err)</span>
+        }
+        <span class="cov1" title="1">return base64.StdEncoding.EncodeToString(b)</span>
+}
+
+func HashPassword(password string) (string, error) <span class="cov10" title="2">{
+        hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+        <span class="cov10" title="2">return string(hashedPassword), nil</span>
+}
+
+func ComparePassword(hash, password string) error <span class="cov10" title="2">{
+        return bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+}</span>
+</pre>
+		
+		<pre class="file" id="file41" style="display: none">package utils
+
+import "time"
+
+func IntToDuration(s int) time.Duration <span class="cov10" title="5">{
+        return time.Duration(s) * time.Second
+}</span>
+</pre>
+		
+		<pre class="file" id="file42" style="display: none">package utils
+
+import (
+        "github.com/gin-gonic/gin/binding"
+        "github.com/go-playground/validator/v10"
+)
+
+func init() <span class="cov1" title="1">{
+        if v, ok := binding.Validator.Engine().(*validator.Validate); ok </span><span class="cov1" title="1">{
+                // проверка не требуется, т.к. проверяется ключ и функция на nil, иначе - паника
+                _ = v.RegisterValidation("luhn", luhnValidation)
+        }</span>
+}
+
+var luhnValidation validator.Func = func(fl validator.FieldLevel) bool <span class="cov10" title="2">{
+        number, ok := fl.Field().Interface().(string)
+        if !ok </span><span class="cov0" title="0">{
+                return false
+        }</span>
+
+        <span class="cov10" title="2">return LuhnCheck(number)</span>
+}
+</pre>
+		
+		<pre class="file" id="file43" style="display: none">package jwt
+
+import (
+        "errors"
+        "time"
+
+        "github.com/ex0rcist/gophermart/internal/entities"
+        "github.com/golang-jwt/jwt/v4"
+)
+
+var ErrInvalidToken = errors.New("invalid JWT token")
+
+const LoginTokenLifetime = 1 * time.Hour
+
+type GMClaims struct {
+        jwt.RegisteredClaims
+        Login string
+}
+
+func CreateJWT(key entities.Secret, login string, duration time.Duration) (string, error) <span class="cov10" title="5">{
+        token := jwt.NewWithClaims(jwt.SigningMethodHS256, GMClaims{
+                RegisteredClaims: jwt.RegisteredClaims{
+                        ExpiresAt: jwt.NewNumericDate(time.Now().Add(duration)),
+                },
+                Login: login,
+        })
+
+        tokenString, err := token.SignedString([]byte(key))
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov10" title="5">return tokenString, nil</span>
+}
+
+func ParseJWT(key entities.Secret, rawToken string) (string, time.Time, error) <span class="cov10" title="5">{
+        claims := new(GMClaims)
+        keyFunc := func(token *jwt.Token) (interface{}, error) </span><span class="cov8" title="4">{
+                return []byte(key), nil
+        }</span>
+
+        <span class="cov10" title="5">token, err := jwt.ParseWithClaims(rawToken, claims, keyFunc)
+        if err != nil </span><span class="cov7" title="3">{
+                return "", time.Time{}, err
+        }</span>
+
+        <span class="cov4" title="2">if !token.Valid </span><span class="cov0" title="0">{
+                return "", time.Time{}, ErrInvalidToken
+        }</span>
+
+        <span class="cov4" title="2">if claims.ExpiresAt == nil </span><span class="cov0" title="0">{
+                return "", time.Time{}, ErrInvalidToken
+        }</span>
+
+        <span class="cov4" title="2">return claims.Login, claims.ExpiresAt.Time, nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

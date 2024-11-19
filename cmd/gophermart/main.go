@@ -1,13 +1,22 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/ex0rcist/gophermart/internal/app"
 	"github.com/ex0rcist/gophermart/internal/config"
 	"github.com/ex0rcist/gophermart/internal/logging"
 )
 
+var (
+	buildVersion = "N/A"
+	buildDate    = "N/A"
+	buildCommit  = "N/A"
+)
+
 func main() {
 	logging.Setup()
+	fmt.Printf("Build version: %s\nBuild date: %s\nBuild commit: %s\n", buildVersion, buildDate, buildCommit)
 	logging.LogInfo("starting server...")
 
 	config, err := config.Parse()
