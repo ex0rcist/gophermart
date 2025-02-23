@@ -2,7 +2,6 @@ package accrual
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -71,7 +70,6 @@ func TestGetBonuses_TooManyRequests(t *testing.T) {
 
 	response, err := client.GetBonuses(ctx, "12345")
 
-	fmt.Println(err)
 	assert.Nil(t, response)
 	assert.NotNil(t, err)
 	assert.Equal(t, http.StatusTooManyRequests, err.HTTPStatus)
